@@ -8,7 +8,7 @@ import {
 function App() {
   return (
     <Router>
-      <div className="bg-gradient-to-b from-red-600 to-white w-screen min-h-screen">
+      <div className="bg-gradient-to-b from-blue-300 to-blue-600 w-screen min-h-screen">
         <Switch>
           <Route exact path="/">
             <Dashboard />
