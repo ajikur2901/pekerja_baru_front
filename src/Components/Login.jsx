@@ -1,5 +1,5 @@
 import React from 'react';
-import Komputer from './img/computer.jpg';
+import Komputer from './img/komputer.png';
 
 class Login extends React.Component {
 
@@ -9,20 +9,20 @@ class Login extends React.Component {
                 <div className="bg-white rounded-2xl h-full w-full p-4 shadow-2xl">
                     <div className="
                         invisible 
-                        absolute inset-y-0 h-full
-                        md:visible md:w-full md:h-auto
-                        lg:left-6 lg:w-3/5 lg:content-center lg:p-6 lg:align-middle ">
-                        <img src={Komputer} alt="http://www.freepik.com" className="w-full lg:rounded-md"/>
-                        <a href="http://www.freepik.com" 
-                            target="_blank" 
-                            className="text-blue-400"
-                            rel="noreferrer">
-                            Designed by pch.vector / Freepik
-                        </a>
+                        md:absolute md:bottom-0
+                        md:visible md:h-auto md:w-5/6
+                        lg:left-6 lg:w-3/5 lg:content-center lg:p-6 ">
+                            <img src={Komputer} alt="http://www.freepik.com" className="w-full lg:rounded-md"/>
+                            <a href="http://www.freepik.com" 
+                                target="_blank" 
+                                className="text-blue-400"
+                                rel="noreferrer">
+                                Designed by pch.vector / Freepik
+                            </a>
                     </div>
                     <div className="
-                        absolute w-full p-6 inset-auto
-                        md:w-80 md:h-3/5 md:inset-y-auto
+                        block w-full p-4 inset-auto
+                        md:absolute md:w-80 md:h-auto md:inset-y-auto md:right-4 md:top-4
                         lg:left-auto lg:right-6 lg:bottom-auto
                         ">
                         <div className="rounded-xl h-full w-full bg-white p-4 border-2 border-blue-400">
