@@ -1,7 +1,32 @@
 import React from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    fetchUser
+} from '../Actions/UserActions';
 import Komputer from './img/komputer.png';
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+
 
 class Login extends React.Component {
+    state = {
+        email: "",
+        password: ""
+    }
+
+    handleOnChange = (e) => {
+        e.persist();
+        this.setState(() => ({
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        this.props.fetchUser(this.state);
+    }
 
     render(){
         return(
@@ -26,17 +51,27 @@ class Login extends React.Component {
                         lg:left-auto lg:right-6 lg:bottom-auto
                         ">
                         <div className="rounded-xl h-full w-full bg-white p-4 border-2 border-blue-400">
-                            <div className="mb-4">
-                                <label className="w-full h-8 font-semibold">Username</label>
-                                <input type="text" className="border-2 border-gray-600 rounded-md w-full h-8 focus:border-blue-600" />
-                            </div>
-                            <div className="mb-4">
-                                <label className="w-full h-8 font-semibold">Password</label>
-                                <input type="password" className="border-2 border-gray-600 rounded-md w-full h-8 focus:border-blue-600" />
-                            </div>
-                            <div className="mb-4">
-                                <button type="button" className="bg-blue-500 font-semibold w-full h-8 rounded-md text-white " >Masuk</button>
-                            </div>
+                            <form onSubmit={this.onSubmit} >
+                                <TextField
+                                    id="email"
+                                    label="email"
+                                    name="email"
+                                    value={this.state.email}
+                                    onChange={this.handleOnChange}
+                                    type="email"
+                                />
+                                <TextField
+                                    id="password"
+                                    label="password"
+                                    name="password"
+                                    value={this.state.password}
+                                    onChange={this.handleOnChange}
+                                    type="password"
+                                />
+                                <Button variant="contained" color="primary" type="submit">
+                                    Masuk
+                                </Button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -45,4 +80,10 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUser: (userInfo) => dispatch(fetchUser(userInfo))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Login);

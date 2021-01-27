@@ -1,30 +1,109 @@
 import React from 'react';
+import { Button, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
 import InputDataPribadi from './InputDataPribadi';
 import InputDataAlamat from './InputDataAlamat';
 import InputDataKeluarga from './InputDataKeluarga';
 import InputDataBpjs from './InputDataBpjs';
 
-class InputData extends React.Component {
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    backButton: {
+        marginRight: theme.spacing(1),
+    },
+    instructions: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+}))
 
-    render(){
-        return(
-            <div>
-                <div className="h-auto w-full p-4">
-                    <div className="bg-white h-auto rounded-md w-full p-4">
-                        <div className="mb-4 border-2 border-purple-600 text-center rounded-md min-h-10 align-middle">
-                            <h1 className="text-xl align-middle">Data Pekerja CV. Karya Hidup Sentosa</h1>
-                        </div>
-                        <div className="h-auto">
-                            <InputDataPribadi />
-                            <InputDataAlamat />
-                            <InputDataKeluarga />
-                            <InputDataBpjs />
-                        </div>
+function getSteps() {
+    return [
+        'Input Data Pribadi',
+        'Input Data Alamat Pekerja',
+        'Input Data Anggota Keluarga',
+        'Input Data BPJS Kesehatan & Ketenagakerjaan'
+    ]
+}
+
+function getStepContent(stepIndex){
+    switch(stepIndex){
+        case 0:
+            return <InputDataPribadi />;
+        case 1:
+            return <InputDataAlamat />;
+        case 2:
+            return <InputDataKeluarga />;
+        case 3: 
+            return <InputDataBpjs />;
+        default:
+            return 'Unkown StepIndex';
+    }
+}
+
+
+function InputData(){
+    const classes = useStyles();
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
+
+    const handleBack = () => {
+        setActiveStep((activeStep) => activeStep - 1);
+    }
+
+    const handleNext = () => {
+        setActiveStep((activeStep) => activeStep + 1);
+    }
+
+    const handleReset = () => {
+        setActiveStep(0);
+    }
+
+    return (
+        <div className=" w-full min-h-screen h-full p-4">
+            <div className="bg-white rounded-2xl h-full w-full p-4 shadow-2xl">
+                <div className={classes.root}>
+                    <Stepper activeStep={activeStep} alternativeLabel>
+                        {
+                            steps.map((label) => (
+                                <Step key={label} >
+                                    <StepLabel>
+                                        {label}
+                                    </StepLabel>
+                                </Step>
+                            ))
+                        }
+                    </Stepper>
+                    <div className="block w-full">
+                        {
+                            activeStep === steps.length ? (
+                                <div>
+                                    <Typography className={classes.instructions}>All Steps Complete</Typography>
+                                    <Button onClick={handleReset}>Reset</Button>
+                                    <Button variant="contained" color="primary" onClick={handleReset}>Simpan</Button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <Typography className={classes.instructions}>
+                                        {getStepContent(activeStep)}
+                                    </Typography>
+                                    <div>
+                                        <Button disabled={activeStep == 0} onClick={handleBack} className={classes.backButton}>
+                                            Back
+                                        </Button>
+                                        <Button variant="contained" color="primary" onClick={handleNext}>
+                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        </Button>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default InputData;
