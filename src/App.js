@@ -23,17 +23,17 @@ class App extends React.Component {
           <Switch>
             <Route path="/Login">
               {
-                !this.props.userReducer.loggedIn ? <Login /> : <Redirect to="/" />
+                this.props.userReducer.loggedIn === false ? <Login /> : <Redirect to="/" />
               }
             </Route>
             <Route exact path="/">
               {
-                !this.props.userReducer.loggedIn ? <Redirect to="/Login" /> : <Dashboard />
+                this.props.userReducer.loggedIn === false ? <Redirect to="/Login" /> : <Dashboard />
               }
             </Route>
             <Route path="/InputData">
               {
-                !this.props.userReducer.loggedIn ? <Redirect to="/Login" /> : <InputData />
+                this.props.userReducer.loggedIn === false ? <Redirect to="/Login" /> : <InputData />
               }
             </Route>
           </Switch>

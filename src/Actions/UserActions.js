@@ -6,7 +6,25 @@ export const logUserOut = () => ({type: "LOG_OUT"})
 
 // methods
 
-export const fetchUser = (userInfo) => dispacth => {
+export const autoLogin = () => dispatch => {
+    fetch('https://api-pb.tuturcinatur.xyz/api/user', {
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.hasOwnProperty('user')){
+            dispatch(setUser(data.user))
+        }else{
+            dispatch(logUserOut());
+        }
+    })
+}
+        
+export const fetchUser = (userInfo) => dispatch => {
 
     var data = new FormData();
 
@@ -24,26 +42,11 @@ export const fetchUser = (userInfo) => dispacth => {
     })
     .then(res => res.json())
     .then(data => {
-        if(data.token !== null && data.token != 'undefined'){
+        if(data.hasOwnProperty('token')){
             localStorage.setItem("token", data.token)
-            dispacth(setUser(data.user))
-        }
-    })
-}
-
-export const autoLogin = () => dispatch => {
-    fetch('https://api-pb.tuturcinatur.xyz/api/user', {
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.token !== null && data.token != 'undefined'){
-            localStorage.setItem("token", data.token)
-            dispatch(setUser(data.user))
+            dispatch(autoLogin());
+        }else{
+            dispatch(logUserOut());
         }
     })
 }
