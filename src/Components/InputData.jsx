@@ -88,7 +88,7 @@ function InputData(){
                                     <Typography component={'span'} className={classes.instructions}>
                                         {getStepContent(activeStep)}
                                     </Typography>
-                                    <div>
+                                    <div className="pt-10">
                                         <Button disabled={activeStep === 0} onClick={handleBack} className={classes.backButton}>
                                             Back
                                         </Button>

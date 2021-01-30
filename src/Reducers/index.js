@@ -1,12 +1,12 @@
 import userReducer from './UserReducer';
-import commentReducer from './CommentReducer';
+import inputDataReducer from './InputDataReducer';
 import {
     combineReducers
 } from 'redux';
 
 const rootReducer = combineReducers({
     userReducer,
-    commentReducer
+    inputDataReducer
 })
 
 export default rootReducer;

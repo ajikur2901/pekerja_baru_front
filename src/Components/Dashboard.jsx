@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
 
 class Dashboard extends React.Component {
 
@@ -16,8 +17,8 @@ class Dashboard extends React.Component {
                             <div className="bg-blue-400 rounded-xl h-full p-4 w-full min-h-40 text-center">
                                 <h1 className="text-3xl text-white">Pendataan Pekerja Baru</h1>
                                 <h1 className="text-3xl text-white">..Company Name..</h1>
-                                <h1 className="text-lg text-white">Nama :</h1>
-                                <h1 className="text-3xl text-white">Aji Kurniawan</h1>
+                                <h1 className="text-3xl text-white">{this.props.userReducer.user.name}</h1>
+                                <h1 className="text-sm text-white" >{this.props.userReducer.user.email}</h1>
                             </div>
                         </div>
                         <div className="lg:col-span-3">
@@ -121,4 +122,11 @@ class Dashboard extends React.Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+    return {
+        userReducer: state.userReducer
+    }
+}
+
+
+export default connect(mapStateToProps)(Dashboard);

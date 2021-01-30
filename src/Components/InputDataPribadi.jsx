@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import TextField from '@material-ui/core/TextField'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import {
-    FormControlLabel, Grid, Radio, Select, MenuItem,InputLabel
+    FormControlLabel, Grid, Radio, MenuItem
 } from '@material-ui/core';
-
+import {
+    useSelector, useDispatch
+} from 'react-redux';
+import {
+    saveDataPribadi
+} from '../Actions/InputDataActions';
 
 const InputDataPribadi = () => {
-    const [nik,setNIK]                  = React.useState('');
-    const [noKk,setNoKK]                = React.useState('');
-    const [noNpwp,setNoNPWP]            = React.useState('');
-    const [nama,setNama]                = React.useState('');
-    const [jenKel,setJenKel]            = React.useState('');
-    const [agama,setAgama]              = React.useState('');
-    const [nationality,setNationality]  = React.useState('');
-    const [tmpLahir,setTmpLahir]        = React.useState('');
-    const [tglLahir,setTglLahir]        = React.useState('');
-    const [golDarah,setGolDarah]        = React.useState('');
-    const [noHp,setNoHp]                = React.useState('');
-    const [noTelepon,setNoTelepon]      = React.useState('');
-    const [email,setEmail]              = React.useState('');
-    const [statNikah,setStatNikah]      = React.useState('');
-    const [tglNikah,setTglNikah]        = React.useState('');
-    const [jmlAnak,setJmlAnak]          = React.useState('');
+    const dataPribadiStore = useSelector(state => state.inputDataReducer.dataPribadi);
+    const dispatch = useDispatch();
+
+    const [nik,setNIK]                  = useState(dataPribadiStore.nik ? dataPribadiStore.nik : '' );
+    const [noKk,setNoKK]                = useState(dataPribadiStore.noKk ? dataPribadiStore.noKk : '' );
+    const [noNpwp,setNoNPWP]            = useState(dataPribadiStore.noNpwp ? dataPribadiStore.noNpwp : '' );
+    const [nama,setNama]                = useState(dataPribadiStore.nama ? dataPribadiStore.nama : '' );
+    const [jenKel,setJenKel]            = useState(dataPribadiStore.jenKel ? dataPribadiStore.jenKel : '' );
+    const [agama,setAgama]              = useState(dataPribadiStore.agama ? dataPribadiStore.agama : '' );
+    const [nationality,setNationality]  = useState(dataPribadiStore.nationality ? dataPribadiStore.nationality : '' );
+    const [tmpLahir,setTmpLahir]        = useState(dataPribadiStore.tmpLahir ? dataPribadiStore.tmpLahir : '' );
+    const [tglLahir,setTglLahir]        = useState(dataPribadiStore.tglLahir ? dataPribadiStore.tglLahir : '2021-01-01');
+    const [golDarah,setGolDarah]        = useState(dataPribadiStore.golDarah ? dataPribadiStore.golDarah : '');
+    const [noHp,setNoHp]                = useState(dataPribadiStore.noHp ? dataPribadiStore.noHp : '');
+    const [noTelepon,setNoTelepon]      = useState(dataPribadiStore.noTelepon ? dataPribadiStore.noTelepon : '');
+    const [email,setEmail]              = useState(dataPribadiStore.email ? dataPribadiStore.email : '');
+    const [statNikah,setStatNikah]      = useState(dataPribadiStore.statNikah ? dataPribadiStore.statNikah : '');
+    const [tglNikah,setTglNikah]        = useState(dataPribadiStore.tglNikah ? dataPribadiStore.tglNikah : '2021-01-01');
+    const [jmlAnak,setJmlAnak]          = useState(dataPribadiStore.jmlAnak ? dataPribadiStore.jmlAnak : '');
 
     const handleInputChange = (event) => {
-        console.log(event);
         switch(event.target.id){
             case 'nik':
                 setNIK(event.target.value);
@@ -41,17 +48,11 @@ const InputDataPribadi = () => {
             case 'nama':
                 setNama(event.target.value);
                 break;
-            case 'agama':
-                setAgama(event.target.value);
-                break;
             case 'tmpLahir':
                 setTmpLahir(event.target.value);
                 break;
             case 'tglLahir':
                 setTglLahir(event.target.value);
-                break;
-            case 'golDarah':
-                setGolDarah(event.target.value);
                 break;
             case 'noHp':
                 setNoHp(event.target.value);
@@ -73,7 +74,7 @@ const InputDataPribadi = () => {
         }
     }
 
-    const handleRadioChange = (event) => {
+    const handleSelectionChange = (event) => {
         switch(event.target.name){
             case 'jenKel':
                 setJenKel(event.target.value);
@@ -84,10 +85,91 @@ const InputDataPribadi = () => {
             case 'statNikah':
                 setStatNikah(event.target.value);
                 break;
+            case 'agama':
+                setAgama(event.target.value);
+                break;
+            case 'golDarah':
+                setGolDarah(event.target.value);
+                break;
             default:
                 return;
         }
     }
+
+    const saveState = () => {
+        let dataPribadi = {
+            nik         : nik,
+            noKk        : noKk,
+            noNpwp      : noNpwp,
+            nama        : nama,
+            jenKel      : jenKel,
+            agama       : agama,
+            nationality : nationality,
+            tmpLahir    : tmpLahir,
+            tglLahir    : tglLahir,
+            golDarah    : golDarah,
+            noHp        : noHp,
+            noTelepon   : noTelepon,
+            email       : email,
+            statNikah   : statNikah,
+            tglNikah    : tglNikah,
+            jmlAnak     : jmlAnak,
+        }
+        dispatch(saveDataPribadi(dataPribadi));
+    }
+
+    const dataAgama = [
+        {
+            agama: 'Islam'
+        },
+        {
+            agama: 'Kristen'
+        },
+        {
+            agama: 'Katholik'
+        },
+        {
+            agama: 'Hindu'
+        },
+        {
+            agama: 'Budha'
+        },
+        {
+            agama: 'Konghuchu'
+        },
+    ]
+
+    const dataGolDarah = [
+        {
+            gol_darah:'A'
+        },
+        {
+            gol_darah:'B'
+        },
+        {
+            gol_darah:'O'
+        },
+        {
+            gol_darah:'AB'
+        },
+    ]
+
+    useEffect(() => { saveState(); },[nik])
+    useEffect(() => { saveState(); },[noKk])
+    useEffect(() => { saveState(); },[noNpwp])
+    useEffect(() => { saveState(); },[nama])
+    useEffect(() => { saveState(); },[jenKel])
+    useEffect(() => { saveState(); },[agama])
+    useEffect(() => { saveState(); },[nationality])
+    useEffect(() => { saveState(); },[tmpLahir])
+    useEffect(() => { saveState(); },[tglLahir])
+    useEffect(() => { saveState(); },[golDarah])
+    useEffect(() => { saveState(); },[noHp])
+    useEffect(() => { saveState(); },[noTelepon])
+    useEffect(() => { saveState(); },[email])
+    useEffect(() => { saveState(); },[statNikah])
+    useEffect(() => { saveState(); },[tglNikah])
+    useEffect(() => { saveState(); },[jmlAnak])
 
     return(
         <div>
@@ -129,34 +211,63 @@ const InputDataPribadi = () => {
                         fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} lg={6}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Jenis Kelamin</FormLabel>
-                            <RadioGroup aria-label="Jenis Kelamin" name="jenKel" value={jenKel} onChange={handleRadioChange} row>
+                            <RadioGroup aria-label="Jenis Kelamin" name="jenKel" value={jenKel} onChange={handleSelectionChange} row>
                                 <FormControlLabel value="Laki-Laki" control={<Radio/>} label="Laki-Laki" />
                                 <FormControlLabel value="Perempuan" control={<Radio/>} label="Perempuan" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        id="agama"
-                        label="Agama"
-                        value={agama}
-                        onChange={handleInputChange}
-                        fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} lg={6}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Kewarganegaraan</FormLabel>
-                            <RadioGroup aria-label="Kewarganegaraan" name="nationality" value={nationality} onChange={handleRadioChange} row>
+                            <RadioGroup aria-label="Kewarganegaraan" name="nationality" value={nationality} onChange={handleSelectionChange} row>
                                 <FormControlLabel value="WNI" control={<Radio/>} label="WNI" />
                                 <FormControlLabel value="WNA" control={<Radio/>} label="WNA" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} lg={6}>
+                        <TextField
+                        id="agama"
+                        label="Agama"
+                        name="agama"
+                        value={agama}
+                        onChange={handleSelectionChange}
+                        fullWidth
+                        select
+                        >
+                            {
+                                dataAgama.map((option) => (
+                                    <MenuItem key={option.agama} value={option.agama}>
+                                        {option.agama}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                        <TextField
+                        id="golDarah"
+                        label="Gol. Darah"
+                        name="golDarah"
+                        value={golDarah}
+                        onChange={handleSelectionChange}
+                        fullWidth
+                        select
+                        >
+                            {
+                                dataGolDarah.map((option) => (
+                                    <MenuItem key={option.gol_darah} value={option.gol_darah}>
+                                        {option.gol_darah}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} lg={8}>
                         <TextField
                         id="tmpLahir"
                         label="Tempat Lahir"
@@ -165,32 +276,16 @@ const InputDataPribadi = () => {
                         fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} lg={4}>
                         <TextField
                         id="tglLahir"
                         label="Tanggal Lahir"
                         value={tglLahir}
                         onChange={handleInputChange}
                         fullWidth
+                        type="date"
                         />
                         
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl>
-                            <InputLabel id="golDarahLabel">Gol. Darah</InputLabel>
-                            <Select
-                                labelId="golDarahLabel"
-                                id="golDarah"
-                                value={golDarah}
-                                onChange={handleInputChange}
-                                autoWidth
-                            >
-                                <MenuItem value="A">A</MenuItem>
-                                <MenuItem value="B">B</MenuItem>
-                                <MenuItem value="O">O</MenuItem>
-                                <MenuItem value="AB">AB</MenuItem>
-                            </Select>
-                        </FormControl>
                     </Grid>
                     <Grid item xs={12} lg={4}>
                         <TextField
@@ -222,7 +317,7 @@ const InputDataPribadi = () => {
                     <Grid item xs={12}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Status Pernikahan</FormLabel>
-                            <RadioGroup aria-label="Status Pernikahan" name="statNikah" value={statNikah} onChange={handleRadioChange} row>
+                            <RadioGroup aria-label="Status Pernikahan" name="statNikah" value={statNikah} onChange={handleSelectionChange} row>
                                 <FormControlLabel value="Menikah" control={<Radio/>} label="Menikah" />
                                 <FormControlLabel value="Belum Menikah" control={<Radio/>} label="Belum Menikah" />
                             </RadioGroup>
@@ -235,6 +330,7 @@ const InputDataPribadi = () => {
                         value={tglNikah}
                         onChange={handleInputChange}
                         fullWidth
+                        type="date"
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -244,6 +340,7 @@ const InputDataPribadi = () => {
                         value={jmlAnak}
                         onChange={handleInputChange}
                         fullWidth
+                        type="number"
                         />
                     </Grid>
                 </Grid>
@@ -251,5 +348,7 @@ const InputDataPribadi = () => {
         </div>
     )
 }
+
+
 
 export default InputDataPribadi;
