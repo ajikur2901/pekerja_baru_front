@@ -10,11 +10,14 @@ import {
     useSelector, useDispatch
 } from 'react-redux';
 import {
-    saveDataPribadi
+    saveDataPribadi,
+    getDataAgama
 } from '../Actions/InputDataActions';
 
 const InputDataPribadi = () => {
     const dataPribadiStore = useSelector(state => state.inputDataReducer.dataPribadi);
+    const masterAgamaStore = useSelector(state => state.inputDataReducer.masterAgama);
+
     const dispatch = useDispatch();
 
     const [nik,setNIK]                  = useState(dataPribadiStore.nik ? dataPribadiStore.nik : '' );
@@ -118,26 +121,7 @@ const InputDataPribadi = () => {
         dispatch(saveDataPribadi(dataPribadi));
     }
 
-    const dataAgama = [
-        {
-            agama: 'Islam'
-        },
-        {
-            agama: 'Kristen'
-        },
-        {
-            agama: 'Katholik'
-        },
-        {
-            agama: 'Hindu'
-        },
-        {
-            agama: 'Budha'
-        },
-        {
-            agama: 'Konghuchu'
-        },
-    ]
+    const dataAgama = masterAgamaStore || [];
 
     const dataGolDarah = [
         {
@@ -153,6 +137,7 @@ const InputDataPribadi = () => {
             gol_darah:'AB'
         },
     ]
+
 
     useEffect(() => { saveState(); },[nik])
     useEffect(() => { saveState(); },[noKk])
@@ -171,6 +156,8 @@ const InputDataPribadi = () => {
     useEffect(() => { saveState(); },[tglNikah])
     useEffect(() => { saveState(); },[jmlAnak])
 
+    useEffect(() => { if (dataAgama.length == 0){ dispatch(getDataAgama()) } },[])
+
     return(
         <div>
             <form>
@@ -182,6 +169,8 @@ const InputDataPribadi = () => {
                         value={nik}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -191,6 +180,8 @@ const InputDataPribadi = () => {
                         value={noKk}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -200,6 +191,8 @@ const InputDataPribadi = () => {
                         value={noNpwp}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -209,6 +202,8 @@ const InputDataPribadi = () => {
                         value={nama}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={6}>
@@ -274,6 +269,8 @@ const InputDataPribadi = () => {
                         value={tmpLahir}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -294,6 +291,8 @@ const InputDataPribadi = () => {
                         value={noHp}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -303,6 +302,8 @@ const InputDataPribadi = () => {
                         value={noTelepon}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12} lg={4}>
@@ -312,6 +313,8 @@ const InputDataPribadi = () => {
                         value={email}
                         onChange={handleInputChange}
                         fullWidth
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -341,6 +344,8 @@ const InputDataPribadi = () => {
                         onChange={handleInputChange}
                         fullWidth
                         type="number"
+                        autoComplete="off"
+                        noValidate
                         />
                     </Grid>
                 </Grid>

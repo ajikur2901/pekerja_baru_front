@@ -1,9 +1,14 @@
 import React from 'react';
-import { Button, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
-import InputDataPribadi from './InputDataPribadi';
-import InputDataAlamat from './InputDataAlamat';
-import InputDataKeluarga from './InputDataKeluarga';
-import InputDataBpjs from './InputDataBpjs';
+import { Button, CircularProgress, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
+// import InputDataPribadi from './InputDataPribadi';
+// import InputDataAlamat from './InputDataAlamat';
+// import InputDataKeluarga from './InputDataKeluarga';
+// import InputDataBpjs from './InputDataBpjs';
+
+const InputDataPribadi  = React.lazy(() => import('./InputDataPribadi'));
+const InputDataAlamat   = React.lazy(() => import('./InputDataAlamat'));
+const InputDataKeluarga = React.lazy(() => import('./InputDataKeluarga'));
+const InputDataBpjs     = React.lazy(() => import('./InputDataBpjs'));
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,7 +91,11 @@ function InputData(){
                             ) : (
                                 <div>
                                     <Typography component={'span'} className={classes.instructions}>
-                                        {getStepContent(activeStep)}
+                                        <React.Suspense fallback={<CircularProgress />} >
+                                            <div>
+                                                {getStepContent(activeStep)}
+                                            </div>
+                                        </React.Suspense>
                                     </Typography>
                                     <div className="pt-10">
                                         <Button disabled={activeStep === 0} onClick={handleBack} className={classes.backButton}>

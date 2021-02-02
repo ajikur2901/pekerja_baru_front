@@ -15,13 +15,18 @@ export const autoLogin = () => dispatch => {
         }
     })
     .then(res => res.json())
-    .then(data => {
-        if(data.hasOwnProperty('user')){
-            dispatch(setUser(data.user))
-        }else{
+    .then(
+        (data) => {
+            if(data.hasOwnProperty('user')){
+                dispatch(setUser(data.user))
+            }else{
+                dispatch(logUserOut());
+            }
+        },
+        (error) => {
             dispatch(logUserOut());
         }
-    })
+    )
 }
         
 export const fetchUser = (userInfo) => dispatch => {
