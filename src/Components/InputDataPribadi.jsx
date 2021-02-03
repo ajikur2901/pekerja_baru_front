@@ -156,7 +156,7 @@ const InputDataPribadi = () => {
     useEffect(() => { saveState(); },[tglNikah])
     useEffect(() => { saveState(); },[jmlAnak])
 
-    useEffect(() => { if (dataAgama.length == 0){ dispatch(getDataAgama()) } },[])
+    useEffect(() => { if (dataAgama.length === 0){ dispatch(getDataAgama()) } },[])
 
     return(
         <div>

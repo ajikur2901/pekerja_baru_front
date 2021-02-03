@@ -35,9 +35,9 @@ function getSteps() {
 function getStepContent(stepIndex){
     switch(stepIndex){
         case 0:
-            return <InputDataPribadi />;
-        case 1:
             return <InputDataAlamat />;
+        case 1:
+            return <InputDataPribadi />;
         case 2:
             return <InputDataKeluarga />;
         case 3: 
