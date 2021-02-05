@@ -121,8 +121,7 @@ const InputDataPribadi = () => {
         dispatch(saveDataPribadi(dataPribadi));
     }
 
-    const dataAgama = masterAgamaStore || [];
-
+    
     const dataGolDarah = [
         {
             gol_darah:'A'
@@ -137,8 +136,8 @@ const InputDataPribadi = () => {
             gol_darah:'AB'
         },
     ]
-
-
+    
+    
     useEffect(() => { saveState(); },[nik])
     useEffect(() => { saveState(); },[noKk])
     useEffect(() => { saveState(); },[noNpwp])
@@ -155,7 +154,8 @@ const InputDataPribadi = () => {
     useEffect(() => { saveState(); },[statNikah])
     useEffect(() => { saveState(); },[tglNikah])
     useEffect(() => { saveState(); },[jmlAnak])
-
+    
+    const dataAgama = masterAgamaStore || [];
     useEffect(() => { if (dataAgama.length === 0){ dispatch(getDataAgama()) } },[])
 
     return(
@@ -282,7 +282,6 @@ const InputDataPribadi = () => {
                         fullWidth
                         type="date"
                         />
-                        
                     </Grid>
                     <Grid item xs={12} lg={4}>
                         <TextField
@@ -317,7 +316,7 @@ const InputDataPribadi = () => {
                         noValidate
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} lg={4}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Status Pernikahan</FormLabel>
                             <RadioGroup aria-label="Status Pernikahan" name="statNikah" value={statNikah} onChange={handleSelectionChange} row>

@@ -1,12 +1,13 @@
 const defaultState = {
     dataPribadi: {},
     dataAlamat: {},
-    dataKeluarga: {},
+    dataKeluarga: [],
     dataBpjs: {},
     masterAgama: [],
     masterHubunganKeluarga: [],
     masterHubunganKerja: [],
-    masterStatusRumah: []
+    masterStatusRumah: [],
+    inputKeluargaBaru: {}
 }
 
 const inputDataReducer = (state = defaultState, action) => {
@@ -35,6 +36,22 @@ const inputDataReducer = (state = defaultState, action) => {
             state.masterStatusRumah = [
                 ...action.payload
             ]
+            return state
+        case 'SET_DATA_ALAMAT':
+            state.dataAlamat = {
+                ...action.payload
+            }
+            return state
+        case 'SET_DATA_KELUARGA':
+            state.dataKeluarga = [
+                ...state.dataKeluarga,
+                action.payload
+            ]
+            return state
+        case 'SET_INPUT_KELUARGA_BARU':
+            state.inputKeluargaBaru = {
+                ...action.payload
+            }
             return state
         default: return state
     }

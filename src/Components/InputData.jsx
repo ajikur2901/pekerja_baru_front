@@ -28,20 +28,23 @@ function getSteps() {
         'Input Data Pribadi',
         'Input Data Alamat Pekerja',
         'Input Data Anggota Keluarga',
-        'Input Data BPJS Kesehatan & Ketenagakerjaan'
+        'Input Data BPJS Kesehatan & Ketenagakerjaan',
+        'Cek Data'
     ]
 }
 
 function getStepContent(stepIndex){
     switch(stepIndex){
-        case 0:
-            return <InputDataAlamat />;
         case 1:
             return <InputDataPribadi />;
+        case 0:
+            return <InputDataAlamat />;
         case 2:
             return <InputDataKeluarga />;
         case 3: 
             return <InputDataBpjs />;
+        case 4:
+            return 'verifikasi data';
         default:
             return 'Unkown StepIndex';
     }

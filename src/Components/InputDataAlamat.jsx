@@ -1,33 +1,50 @@
 import React from 'react';
 import {
-    Grid, FormControl, InputLabel, Select, MenuItem,
+    Grid, MenuItem,
     TextField, CircularProgress
 } from '@material-ui/core';
 import {
     Autocomplete
 } from '@material-ui/lab';
+import {
+    getDataStatusRumah,
+    saveDataAlamat
+} from '../Actions/InputDataActions';
+import {
+    useSelector, useDispatch
+} from 'react-redux';
+
 
 const InputDataAlamat = () => {
-    const [alamatKtp, setAlamatKtp] = React.useState('');
-    const [provKtp, setProvKtp]     = React.useState('');
-    const [provIdKtp, setProvIdKtp] = React.useState('');
-    const [kabKtp, setKabKtp]       = React.useState('');
-    const [kabIdKtp, setKabIdKtp]   = React.useState('');
-    const [kecKtp, setKecKtp]       = React.useState('');
-    const [kecIdKtp, setKecIdKtp]   = React.useState('');
-    const [kelKtp, setKelKtp]       = React.useState('');
-    const [kelIdKtp, setKelIdKtp]   = React.useState('');
-    const [posKtp, setPosKtp]       = React.useState('');
-    const [statRumahKtp, setStatRumahKtp] = React.useState('');
+    const dataAlamatStore = useSelector(state => state.inputDataReducer.dataAlamat);
+    const masterStatusRumahStore = useSelector(state => state.inputDataReducer.masterStatusRumah);
+
+    const dispatch = useDispatch();
+
+    const [alamatKtp, setAlamatKtp] = React.useState(dataAlamatStore.alamatKtp  ? dataAlamatStore.alamatKtp : '');
+    const [provKtp, setProvKtp]     = React.useState(dataAlamatStore.provKtp    ? dataAlamatStore.provKtp : {});
+    const [provIdKtp, setProvIdKtp] = React.useState(dataAlamatStore.provKtp    ? dataAlamatStore.provKtp.id : '');
+    const [kabKtp, setKabKtp]       = React.useState(dataAlamatStore.kabKtp     ? dataAlamatStore.kabKtp : {});
+    const [kabIdKtp, setKabIdKtp]   = React.useState(dataAlamatStore.kabKtp     ? dataAlamatStore.kabKtp.id : '');
+    const [kecKtp, setKecKtp]       = React.useState(dataAlamatStore.kecKtp     ? dataAlamatStore.kecKtp : {});
+    const [kecIdKtp, setKecIdKtp]   = React.useState(dataAlamatStore.kecKtp     ? dataAlamatStore.kecKtp.id : '');
+    const [kelKtp, setKelKtp]       = React.useState(dataAlamatStore.kelKtp     ? dataAlamatStore.kelKtp : {});
+    const [kelIdKtp, setKelIdKtp]   = React.useState(dataAlamatStore.kelKtp     ? dataAlamatStore.kelKtp.id : '');
+    const [posKtp, setPosKtp]       = React.useState(dataAlamatStore.posKtp     ? dataAlamatStore.posKtp : '');
+    const [statRumahKtp, setStatRumahKtp] = React.useState(dataAlamatStore.statRumahKtp ? dataAlamatStore.statRumahKtp : '');
 
     const handleInputChange = (event) => {
         switch(event.target.id){
             case 'alamatKtp':
                 setAlamatKtp(event.target.value);
                 break;
-            case 'posKtp':
-                setPosKtp(event.target.value);
-                break;
+            default:
+                return;
+        }
+    }
+
+    const handleSelectionChange = (event) => {
+        switch(event.target.name){
             case 'statRumahKtp':
                 setStatRumahKtp(event.target.value);
                 break;
@@ -75,7 +92,7 @@ const InputDataAlamat = () => {
     },[openProvKtp]);
 
     const handleInputProvKtpChange = (event,newValue) => {
-        setProvKtp(newValue.nama_provinsi);
+        setProvKtp(newValue);
         setProvIdKtp(newValue.id)
     }
 
@@ -119,7 +136,7 @@ const InputDataAlamat = () => {
     },[openKabKtp]);
 
     const handleInputKabKtpChange = (event,newValue) => {
-        setKabKtp(newValue.nama_kabupaten);
+        setKabKtp(newValue);
         setKabIdKtp(newValue.id)
     }
 
@@ -163,7 +180,7 @@ const InputDataAlamat = () => {
     },[openKecKtp]);
 
     const handleInputKecKtpChange = (event,newValue) => {
-        setKecKtp(newValue.nama_kecammatan);
+        setKecKtp(newValue);
         setKecIdKtp(newValue.id)
     }
 
@@ -207,28 +224,55 @@ const InputDataAlamat = () => {
     },[openKelKtp]);
 
     const handleInputKelKtpChange = (event,newValue) => {
-        setKelKtp(newValue.nama_kelurahan);
+        setKelKtp(newValue);
         setKelIdKtp(newValue.id)
     }
 
     // start kode pos ktp
     React.useEffect(() => {
-        if()
-        (async () => {
-            const kelIdEncoded = encodeURIComponent(kelIdKtp);
-            const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kelurahan/search?kelurahan_id=' + kelIdEncoded , {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-            const kodePos = await response.json();
-            
-            setPosKtp(kodePos);
-        })(); 
+        if(kelIdKtp !== ''){
+            (async () => {
+                const kelIdEncoded = encodeURIComponent(kelIdKtp);
+                const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kodepos/search?kelurahan_id=' + kelIdEncoded , {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
+                const kodePos = await response.json();
+                if(Array.isArray(kodePos)){
+                    setPosKtp(kodePos[0].no_kodepos);
+                }
+            })(); 
+        }
     },[kelIdKtp])
 
+    //  start status rumah
+    const dataStatusRumah = masterStatusRumahStore || [];
+    React.useEffect(() => { if (dataStatusRumah.length === 0){ dispatch(getDataStatusRumah()) } },[])
+
+    // save data
+    const saveState = () => {
+        let dataAlamat = {
+            alamatKtp   : alamatKtp,
+            provKtp     : provKtp,
+            kabKtp      : kabKtp,
+            kecKtp      : kecKtp,
+            kelKtp      : kelKtp,
+            posKtp      : posKtp,
+            statRumahKtp: statRumahKtp
+        }
+
+        dispatch(saveDataAlamat(dataAlamat));
+    }
+    React.useEffect(() => { saveState(); },[alamatKtp])
+    React.useEffect(() => { saveState(); },[provKtp])
+    React.useEffect(() => { saveState(); },[kabKtp])
+    React.useEffect(() => { saveState(); },[kecKtp])
+    React.useEffect(() => { saveState(); },[kelKtp])
+    React.useEffect(() => { saveState(); },[posKtp])
+    React.useEffect(() => { saveState(); },[statRumahKtp])
 
     return(
         <div>
@@ -257,9 +301,10 @@ const InputDataAlamat = () => {
                                     setOpenProvKtp(false)
                                 }}
                                 getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_provinsi}
+                                getOptionLabel={(option) => option.nama_provinsi ? option.nama_provinsi : ''}
                                 options={optionsProvKtp}
                                 loading={loadingProvKtp}
+                                value={provKtp}
                                 onChange={handleInputProvKtpChange}
                                 renderInput={(params) => (
                                     <TextField
@@ -289,9 +334,10 @@ const InputDataAlamat = () => {
                                     setOpenKabKtp(false)
                                 }}
                                 getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kabupaten}
+                                getOptionLabel={(option) => option.nama_kabupaten ? option.nama_kabupaten : ''}
                                 options={optionsKabKtp}
                                 loading={loadingKabKtp}
+                                value={kabKtp}
                                 onChange={handleInputKabKtpChange}
                                 renderInput={(params) => (
                                     <TextField
@@ -321,9 +367,10 @@ const InputDataAlamat = () => {
                                     setOpenKecKtp(false)
                                 }}
                                 getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kecamatan}
+                                getOptionLabel={(option) => option.nama_kecamatan ? option.nama_kecamatan : ''}
                                 options={optionsKecKtp}
                                 loading={loadingKecKtp}
+                                value={kecKtp}
                                 onChange={handleInputKecKtpChange}
                                 renderInput={(params) => (
                                     <TextField
@@ -353,9 +400,10 @@ const InputDataAlamat = () => {
                                     setOpenKelKtp(false)
                                 }}
                                 getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kelurahan}
+                                getOptionLabel={(option) => option.nama_kelurahan ? option.nama_kelurahan : ''}
                                 options={optionsKelKtp}
                                 loading={loadingKelKtp}
+                                value={kelKtp}
                                 onChange={handleInputKelKtpChange}
                                 renderInput={(params) => (
                                     <TextField
@@ -383,22 +431,24 @@ const InputDataAlamat = () => {
                             fullWidth
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControl>
-                                <InputLabel id="statRumahKtpLabel">Status Rumah</InputLabel>
-                                <Select
-                                    labelId="statRumahKtpLabel"
-                                    id="statRumahKtp"
-                                    value={statRumahKtp}
-                                    onChange={handleInputChange}
-                                    autoWidth
-                                >
-                                    <MenuItem value="A">Orang Tua</MenuItem>
-                                    <MenuItem value="B">Kontrak</MenuItem>
-                                    <MenuItem value="O">Kost</MenuItem>
-                                    <MenuItem value="AB">Rumah Sendiri</MenuItem>
-                                </Select>
-                            </FormControl>
+                        <Grid item xs={12} lg={6}>
+                            <TextField
+                            id="statRumahKtp"
+                            label="Status Rumah"
+                            name="statRumahKtp"
+                            value={statRumahKtp}
+                            onChange={handleSelectionChange}
+                            fullWidth
+                            select
+                            >
+                                {
+                                    dataStatusRumah.map((option) => (
+                                        <MenuItem key={option.status} value={option.status}>
+                                            {option.status}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </TextField>
                         </Grid>
                     </Grid>
                     <Grid container item xs={12} lg={6} spacing={3}>
