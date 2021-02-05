@@ -13,7 +13,7 @@ import {
 import {
     useSelector, useDispatch
 } from 'react-redux';
-
+import InputDataAlamatDaerah from './InputDataAlamatDaerah';
 
 const InputDataAlamat = () => {
     const dataAlamatStore = useSelector(state => state.inputDataReducer.dataAlamat);
@@ -274,6 +274,28 @@ const InputDataAlamat = () => {
     React.useEffect(() => { saveState(); },[posKtp])
     React.useEffect(() => { saveState(); },[statRumahKtp])
 
+    const [provDom, setProvDom] = React.useState({});
+    const [kabDom, setKabDom] = React.useState({});
+    const [kecDom, setKecDom] = React.useState({});
+    const [kelDom, setKelDom] = React.useState({});
+    
+    const handleUpdateProvDom = (data) => {
+        setProvDom(data);
+    }
+
+    const handleUpdateKabDom = (data) => {
+        setKabDom(data);
+    }
+    
+    const handleUpdateKecDom = (data) => {
+        setKecDom(data);
+    }
+    
+    const handleUpdateKelDom = (data) => {
+        setKelDom(data);
+    }
+
+
     return(
         <div>
             <form>
@@ -453,7 +475,39 @@ const InputDataAlamat = () => {
                     </Grid>
                     <Grid container item xs={12} lg={6} spacing={3}>
                         <Grid item xs={12}>
-                            tes2
+                            <InputDataAlamatDaerah 
+                                id="provinsiDomisili"
+                                label="Provinsi"
+                                onChange={handleUpdateProvDom}
+                                value={provDom}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InputDataAlamatDaerah 
+                                id="kabupatenDomisili"
+                                label="Kabupaten"
+                                onChange={handleUpdateKabDom}
+                                value={kabDom}
+                                provinsi={provDom}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InputDataAlamatDaerah 
+                                id="kecamatanDomisili"
+                                label="Kecamatan"
+                                onChange={handleUpdateKecDom}
+                                value={kecDom}
+                                kabupaten={kabDom}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InputDataAlamatDaerah 
+                                id="kelurahanDomisili"
+                                label="Kelurahan"
+                                onChange={handleUpdateKelDom}
+                                value={kelDom}
+                                kecamatan={kecDom}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
