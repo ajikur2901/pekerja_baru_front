@@ -1,11 +1,8 @@
 import React from 'react';
 import {
-    Grid, MenuItem,
-    TextField, CircularProgress
+    Grid, MenuItem,FormControlLabel,
+    TextField, Typography, Checkbox
 } from '@material-ui/core';
-import {
-    Autocomplete
-} from '@material-ui/lab';
 import {
     getDataStatusRumah,
     saveDataAlamat
@@ -23,20 +20,29 @@ const InputDataAlamat = () => {
 
     const [alamatKtp, setAlamatKtp] = React.useState(dataAlamatStore.alamatKtp  ? dataAlamatStore.alamatKtp : '');
     const [provKtp, setProvKtp]     = React.useState(dataAlamatStore.provKtp    ? dataAlamatStore.provKtp : {});
-    const [provIdKtp, setProvIdKtp] = React.useState(dataAlamatStore.provKtp    ? dataAlamatStore.provKtp.id : '');
     const [kabKtp, setKabKtp]       = React.useState(dataAlamatStore.kabKtp     ? dataAlamatStore.kabKtp : {});
-    const [kabIdKtp, setKabIdKtp]   = React.useState(dataAlamatStore.kabKtp     ? dataAlamatStore.kabKtp.id : '');
     const [kecKtp, setKecKtp]       = React.useState(dataAlamatStore.kecKtp     ? dataAlamatStore.kecKtp : {});
-    const [kecIdKtp, setKecIdKtp]   = React.useState(dataAlamatStore.kecKtp     ? dataAlamatStore.kecKtp.id : '');
     const [kelKtp, setKelKtp]       = React.useState(dataAlamatStore.kelKtp     ? dataAlamatStore.kelKtp : {});
-    const [kelIdKtp, setKelIdKtp]   = React.useState(dataAlamatStore.kelKtp     ? dataAlamatStore.kelKtp.id : '');
     const [posKtp, setPosKtp]       = React.useState(dataAlamatStore.posKtp     ? dataAlamatStore.posKtp : '');
     const [statRumahKtp, setStatRumahKtp] = React.useState(dataAlamatStore.statRumahKtp ? dataAlamatStore.statRumahKtp : '');
+    
+    const [alamatDom, setAlamatDom] = React.useState(dataAlamatStore.alamatDom  ? dataAlamatStore.alamatDom : '');
+    const [provDom, setProvDom]     = React.useState(dataAlamatStore.provDom    ? dataAlamatStore.provDom : {});
+    const [kabDom, setKabDom]       = React.useState(dataAlamatStore.kabDom     ? dataAlamatStore.kabDom : {});
+    const [kecDom, setKecDom]       = React.useState(dataAlamatStore.kecDom     ? dataAlamatStore.kecDom : {});
+    const [kelDom, setKelDom]       = React.useState(dataAlamatStore.kelDom     ? dataAlamatStore.kelDom : {});
+    const [posDom, setPosDom]       = React.useState(dataAlamatStore.posDom     ? dataAlamatStore.posDom : '');
+    const [statRumahDom, setStatRumahDom] = React.useState(dataAlamatStore.statRumahDom ? dataAlamatStore.statRumahDom : '');
+
+    const [checkSama, setCheckSama] = React.useState(false);
 
     const handleInputChange = (event) => {
         switch(event.target.id){
             case 'alamatKtp':
                 setAlamatKtp(event.target.value);
+                break;
+            case 'alamatDom':
+                setAlamatDom(event.target.value);
                 break;
             default:
                 return;
@@ -48,191 +54,35 @@ const InputDataAlamat = () => {
             case 'statRumahKtp':
                 setStatRumahKtp(event.target.value);
                 break;
+            case 'statRumahDom':
+                setStatRumahDom(event.target.value);
+                break;
             default:
                 return;
         }
     }
 
-    // start provinsi ktp
-    const [openProvKtp, setOpenProvKtp] = React.useState(false);
-    const [optionsProvKtp, setOptionsProvKtp] = React.useState([]);
-    const loadingProvKtp =  openProvKtp && optionsProvKtp.length === 0;
-
-    React.useEffect(() => {
-        let active = true;
-
-        if(!loadingProvKtp){
-            return undefined;
-        }
-
-        (async () => {
-            const response = await fetch('https://api-pb.tuturcinatur.xyz/api/provinsi', {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-            const provinsi = await response.json();
-
-            if(active){
-                setOptionsProvKtp(provinsi);
-            }
-        })(); 
-
-        return () => {
-            active = false;
-        }
-    },[loadingProvKtp])
-
-    React.useEffect(() => {
-        if(!openProvKtp) {
-            setOptionsProvKtp([]);
-        }
-    },[openProvKtp]);
-
-    const handleInputProvKtpChange = (event,newValue) => {
-        setProvKtp(newValue);
-        setProvIdKtp(newValue.id)
+    const handleCheck = (event) => {
+        setCheckSama(event.target.checked)
     }
 
-    // start kabupaten ktp
-    const [openKabKtp, setOpenKabKtp] = React.useState(false);
-    const [optionsKabKtp, setOptionsKabKtp] = React.useState([]);
-    const loadingKabKtp =  openKabKtp && optionsKabKtp.length === 0;
-
     React.useEffect(() => {
-        let active = true;
-
-        if(!loadingKabKtp){
-            return undefined;
+        if(checkSama){
+            setAlamatDom(alamatKtp)
+            setProvDom(provKtp)
+            setKabDom(kabKtp)
+            setKecDom(kecKtp)
+            setKelDom(kelKtp)
+            setPosDom(posKtp)
+            setStatRumahDom(statRumahKtp)
         }
-
-        (async () => {
-            const provIdEncoded = encodeURIComponent(provIdKtp);
-            const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kabupaten/search?provinsi_id=' + provIdEncoded , {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-            const kabupaten = await response.json();
-
-            if(active){
-                setOptionsKabKtp(kabupaten);
-            }
-        })(); 
-
-        return () => {
-            active = false;
-        }
-    },[loadingKabKtp])
-
-    React.useEffect(() => {
-        if(!openKabKtp) {
-            setOptionsKabKtp([]);
-        }
-    },[openKabKtp]);
-
-    const handleInputKabKtpChange = (event,newValue) => {
-        setKabKtp(newValue);
-        setKabIdKtp(newValue.id)
-    }
-
-    // start kecamatan ktp
-    const [openKecKtp, setOpenKecKtp] = React.useState(false);
-    const [optionsKecKtp, setOptionsKecKtp] = React.useState([]);
-    const loadingKecKtp =  openKecKtp && optionsKecKtp.length === 0;
-
-    React.useEffect(() => {
-        let active = true;
-
-        if(!loadingKecKtp){
-            return undefined;
-        }
-
-        (async () => {
-            const kabIdEncoded = encodeURIComponent(kabIdKtp);
-            const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kecamatan/search?kabupaten_id=' + kabIdEncoded , {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-            const kecamatan = await response.json();
-
-            if(active){
-                setOptionsKecKtp(kecamatan);
-            }
-        })(); 
-
-        return () => {
-            active = false;
-        }
-    },[loadingKecKtp])
-
-    React.useEffect(() => {
-        if(!openKecKtp) {
-            setOptionsKecKtp([]);
-        }
-    },[openKecKtp]);
-
-    const handleInputKecKtpChange = (event,newValue) => {
-        setKecKtp(newValue);
-        setKecIdKtp(newValue.id)
-    }
-
-    // start kelurahan ktp
-    const [openKelKtp, setOpenKelKtp] = React.useState(false);
-    const [optionsKelKtp, setOptionsKelKtp] = React.useState([]);
-    const loadingKelKtp =  openKelKtp && optionsKelKtp.length === 0;
-
-    React.useEffect(() => {
-        let active = true;
-
-        if(!loadingKelKtp){
-            return undefined;
-        }
-
-        (async () => {
-            const kecIdEncoded = encodeURIComponent(kecIdKtp);
-            const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kelurahan/search?kecamatan_id=' + kecIdEncoded , {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-            const kelurahan = await response.json();
-
-            if(active){
-                setOptionsKelKtp(kelurahan);
-            }
-        })(); 
-
-        return () => {
-            active = false;
-        }
-    },[loadingKelKtp])
-
-    React.useEffect(() => {
-        if(!openKelKtp) {
-            setOptionsKelKtp([]);
-        }
-    },[openKelKtp]);
-
-    const handleInputKelKtpChange = (event,newValue) => {
-        setKelKtp(newValue);
-        setKelIdKtp(newValue.id)
-    }
+    },[checkSama,alamatKtp,provKtp,kabKtp,kecKtp,kelKtp,posKtp,statRumahKtp])
 
     // start kode pos ktp
     React.useEffect(() => {
-        if(kelIdKtp !== ''){
+        if(kelKtp !== null && kelKtp.id){
             (async () => {
-                const kelIdEncoded = encodeURIComponent(kelIdKtp);
+                const kelIdEncoded = encodeURIComponent(kelKtp.id);
                 const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kodepos/search?kelurahan_id=' + kelIdEncoded , {
                         headers: {
                             "Content-Type": "application/json",
@@ -246,9 +96,29 @@ const InputDataAlamat = () => {
                 }
             })(); 
         }
-    },[kelIdKtp])
+    },[kelKtp])
 
-    //  start status rumah
+    // start kode pos domisili
+    React.useEffect(() => {
+        if(kelDom !== null && kelDom.id){
+            (async () => {
+                const kelIdEncoded = encodeURIComponent(kelDom.id);
+                const response = await fetch('https://api-pb.tuturcinatur.xyz/api/kodepos/search?kelurahan_id=' + kelIdEncoded , {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
+                const kodePos = await response.json();
+                if(Array.isArray(kodePos)){
+                    setPosDom(kodePos[0].no_kodepos);
+                }
+            })(); 
+        }
+    },[kelDom])
+
+    //  start status rumah ktp & domisili
     const dataStatusRumah = masterStatusRumahStore || [];
     React.useEffect(() => { if (dataStatusRumah.length === 0){ dispatch(getDataStatusRumah()) } },[])
 
@@ -261,23 +131,19 @@ const InputDataAlamat = () => {
             kecKtp      : kecKtp,
             kelKtp      : kelKtp,
             posKtp      : posKtp,
-            statRumahKtp: statRumahKtp
+            statRumahKtp: statRumahKtp,
+            alamatDom   : alamatDom,
+            provDom     : provDom,
+            kabDom      : kabDom,
+            kecDom      : kecDom,
+            kelDom      : kelDom,
+            posDom      : posDom,
+            statRumahDom: statRumahDom
         }
 
         dispatch(saveDataAlamat(dataAlamat));
     }
-    React.useEffect(() => { saveState(); },[alamatKtp])
-    React.useEffect(() => { saveState(); },[provKtp])
-    React.useEffect(() => { saveState(); },[kabKtp])
-    React.useEffect(() => { saveState(); },[kecKtp])
-    React.useEffect(() => { saveState(); },[kelKtp])
-    React.useEffect(() => { saveState(); },[posKtp])
-    React.useEffect(() => { saveState(); },[statRumahKtp])
-
-    const [provDom, setProvDom] = React.useState({});
-    const [kabDom, setKabDom] = React.useState({});
-    const [kecDom, setKecDom] = React.useState({});
-    const [kelDom, setKelDom] = React.useState({});
+    React.useEffect(() => { saveState(); },[alamatKtp,provKtp,kabKtp,kecKtp,kelKtp,posKtp,statRumahKtp,provDom,kabDom,kecDom,kelDom])
     
     const handleUpdateProvDom = (data) => {
         setProvDom(data);
@@ -295,12 +161,33 @@ const InputDataAlamat = () => {
         setKelDom(data);
     }
 
+    const handleUpdateProvKtp = (data) => {
+        setProvKtp(data);
+    }
+
+    const handleUpdateKabKtp = (data) => {
+        setKabKtp(data);
+    }
+    
+    const handleUpdateKecKtp = (data) => {
+        setKecKtp(data);
+    }
+    
+    const handleUpdateKelKtp = (data) => {
+        setKelKtp(data);
+    }
+
 
     return(
         <div>
             <form>
                 <Grid container spacing={3}>
                     <Grid container item xs={12} lg={6} spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" color="initial">
+                                Alamat Sesuai KTP
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                             id="alamatKtp"
@@ -313,135 +200,38 @@ const InputDataAlamat = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Autocomplete 
-                                id="provKtp"
-                                open={openProvKtp}
-                                onOpen={() => {
-                                    setOpenProvKtp(true)
-                                }}
-                                onClose={() => {
-                                    setOpenProvKtp(false)
-                                }}
-                                getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_provinsi ? option.nama_provinsi : ''}
-                                options={optionsProvKtp}
-                                loading={loadingProvKtp}
+                            <InputDataAlamatDaerah 
+                                id="provinsiKtp"
+                                label="Provinsi"
+                                onChange={handleUpdateProvKtp}
                                 value={provKtp}
-                                onChange={handleInputProvKtpChange}
-                                renderInput={(params) => (
-                                    <TextField
-                                        { ...params}
-                                        label="Provinsi"
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            endAdornment: (
-                                                <React.Fragment>
-                                                    {loadingProvKtp ? <CircularProgress color="inherit" size={20} /> : null }
-                                                    {params.InputProps.endAdornment}
-                                                </React.Fragment>
-                                            ),
-                                        }}
-                                    />
-                                )}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Autocomplete 
-                                id="kabKtp"
-                                open={openKabKtp}
-                                onOpen={() => {
-                                    setOpenKabKtp(true)
-                                }}
-                                onClose={() => {
-                                    setOpenKabKtp(false)
-                                }}
-                                getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kabupaten ? option.nama_kabupaten : ''}
-                                options={optionsKabKtp}
-                                loading={loadingKabKtp}
+                            <InputDataAlamatDaerah 
+                                id="kabupatenKtp"
+                                label="Kabupaten"
+                                onChange={handleUpdateKabKtp}
                                 value={kabKtp}
-                                onChange={handleInputKabKtpChange}
-                                renderInput={(params) => (
-                                    <TextField
-                                        { ...params}
-                                        label="Kabupaten / Kota"
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            endAdornment: (
-                                                <React.Fragment>
-                                                    {loadingKabKtp ? <CircularProgress color="inherit" size={20} /> : null }
-                                                    {params.InputProps.endAdornment}
-                                                </React.Fragment>
-                                            ),
-                                        }}
-                                    />
-                                )}
+                                provinsi={provKtp}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Autocomplete 
-                                id="kecKtp"
-                                open={openKecKtp}
-                                onOpen={() => {
-                                    setOpenKecKtp(true)
-                                }}
-                                onClose={() => {
-                                    setOpenKecKtp(false)
-                                }}
-                                getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kecamatan ? option.nama_kecamatan : ''}
-                                options={optionsKecKtp}
-                                loading={loadingKecKtp}
+                            <InputDataAlamatDaerah 
+                                id="kecamatanKtp"
+                                label="Kecamatan"
+                                onChange={handleUpdateKecKtp}
                                 value={kecKtp}
-                                onChange={handleInputKecKtpChange}
-                                renderInput={(params) => (
-                                    <TextField
-                                        { ...params}
-                                        label="Kecamatan"
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            endAdornment: (
-                                                <React.Fragment>
-                                                    {loadingKecKtp ? <CircularProgress color="inherit" size={20} /> : null }
-                                                    {params.InputProps.endAdornment}
-                                                </React.Fragment>
-                                            ),
-                                        }}
-                                    />
-                                )}
+                                kabupaten={kabKtp}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Autocomplete 
-                                id="kelKtp"
-                                open={openKelKtp}
-                                onOpen={() => {
-                                    setOpenKelKtp(true)
-                                }}
-                                onClose={() => {
-                                    setOpenKelKtp(false)
-                                }}
-                                getOptionSelected={(option,value) => option.id === value.id}
-                                getOptionLabel={(option) => option.nama_kelurahan ? option.nama_kelurahan : ''}
-                                options={optionsKelKtp}
-                                loading={loadingKelKtp}
+                            <InputDataAlamatDaerah 
+                                id="kelurahanKtp"
+                                label="Kelurahan"
+                                onChange={handleUpdateKelKtp}
                                 value={kelKtp}
-                                onChange={handleInputKelKtpChange}
-                                renderInput={(params) => (
-                                    <TextField
-                                        { ...params}
-                                        label="Kelurahan"
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            endAdornment: (
-                                                <React.Fragment>
-                                                    {loadingKelKtp ? <CircularProgress color="inherit" size={20} /> : null }
-                                                    {params.InputProps.endAdornment}
-                                                </React.Fragment>
-                                            ),
-                                        }}
-                                    />
-                                )}
+                                kecamatan={kecKtp}
                             />
                         </Grid>
                         <Grid item xs={12} lg={4}>
@@ -474,6 +264,33 @@ const InputDataAlamat = () => {
                         </Grid>
                     </Grid>
                     <Grid container item xs={12} lg={6} spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" color="initial">
+                                Alamat Domisili
+                                <FormControlLabel
+                                    label="Alamat Domisili sama dengan alamat KTP"
+                                    control={
+                                        <Checkbox 
+                                            checked={checkSama} 
+                                            onChange={handleCheck}
+                                            name="checkSama"
+                                            color="primary"
+                                            />
+                                    }
+                                    />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            id="alamatDom"
+                            label="Alamat Rumah"
+                            value={alamatDom}
+                            onChange={handleInputChange}
+                            fullWidth
+                            multiline
+                            rowsMax={4}
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <InputDataAlamatDaerah 
                                 id="provinsiDomisili"
@@ -508,6 +325,34 @@ const InputDataAlamat = () => {
                                 value={kelDom}
                                 kecamatan={kecDom}
                             />
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
+                            <TextField
+                            id="posDom"
+                            label="Kode Pos"
+                            value={posDom}
+                            onChange={handleInputChange}
+                            fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} lg={6}>
+                            <TextField
+                            id="statRumahDom"
+                            label="Status Rumah"
+                            name="statRumahDom"
+                            value={statRumahDom}
+                            onChange={handleSelectionChange}
+                            fullWidth
+                            select
+                            >
+                                {
+                                    dataStatusRumah.map((option) => (
+                                        <MenuItem key={option.status} value={option.status}>
+                                            {option.status}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </TextField>
                         </Grid>
                     </Grid>
                 </Grid>

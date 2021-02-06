@@ -1,14 +1,11 @@
 import React from 'react';
 import { Button, CircularProgress, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
-// import InputDataPribadi from './InputDataPribadi';
-// import InputDataAlamat from './InputDataAlamat';
-// import InputDataKeluarga from './InputDataKeluarga';
-// import InputDataBpjs from './InputDataBpjs';
 
-const InputDataPribadi  = React.lazy(() => import('./InputDataPribadi'));
-const InputDataAlamat   = React.lazy(() => import('./InputDataAlamat'));
-const InputDataKeluarga = React.lazy(() => import('./InputDataKeluarga'));
-const InputDataBpjs     = React.lazy(() => import('./InputDataBpjs'));
+const InputDataPribadi      = React.lazy(() => import('./InputDataPribadi'));
+const InputDataAlamat       = React.lazy(() => import('./InputDataAlamat'));
+const InputDataKeluarga     = React.lazy(() => import('./InputDataKeluarga'));
+const InputDataBpjs         = React.lazy(() => import('./InputDataBpjs'));
+const InputDataVerifikasi   = React.lazy(() => import('./InputDataVerifikasi'));
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,23 +25,20 @@ function getSteps() {
         'Input Data Pribadi',
         'Input Data Alamat Pekerja',
         'Input Data Anggota Keluarga',
-        'Input Data BPJS Kesehatan & Ketenagakerjaan',
-        'Cek Data'
+        'Input Data BPJS Kesehatan & Ketenagakerjaan'
     ]
 }
 
 function getStepContent(stepIndex){
     switch(stepIndex){
-        case 1:
-            return <InputDataPribadi />;
         case 0:
+            return <InputDataPribadi />;
+        case 1:
             return <InputDataAlamat />;
         case 2:
             return <InputDataKeluarga />;
         case 3: 
             return <InputDataBpjs />;
-        case 4:
-            return 'verifikasi data';
         default:
             return 'Unkown StepIndex';
     }
@@ -101,7 +95,7 @@ function InputData(){
                                         </React.Suspense>
                                     </Typography>
                                     <div className="pt-10">
-                                        <Button disabled={activeStep === 0} onClick={handleBack} className={classes.backButton}>
+                                        <Button disabled={activeStep === 0} onClick={handleBack} className={classes.backButton} variant="contained" color="secondary">
                                             Back
                                         </Button>
                                         <Button variant="contained" color="primary" onClick={handleNext}>

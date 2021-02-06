@@ -9,32 +9,48 @@ import {
 
 
 const InputDataBpjs = () => {
-    const dataPribadiStore = useSelector(state => state.inputDataReducer.dataPribadi);
+    const dataPribadiStore  = useSelector(state => state.inputDataReducer.dataPribadi);
+    const dataAlamatStore   = useSelector(state => state.inputDataReducer.dataAlamat);
+    const dataKeluargaStore = useSelector(state => state.inputDataReducer.dataKeluarga);
 
     // from Data Pribadi
-    const [nama,setNama]                = React.useState(dataPribadiStore.nama ? dataPribadiStore.nama : '');
-    const [tmpLahir,setTmpLahir]        = React.useState(dataPribadiStore.tmpLahir ? dataPribadiStore.tmpLahir : '');
-    const [tglLahir,setTglLahir]        = React.useState(dataPribadiStore.tglLahir ? dataPribadiStore.tglLahir : '2021-01-01');
-    const [jenKel,setJenKel]            = React.useState(dataPribadiStore.jenKel ? dataPribadiStore.jenKel : '');
-    const [noHp,setnoHp]                = React.useState(dataPribadiStore.noHp ? dataPribadiStore.noHp : '');
-    const [email,setEmail]              = React.useState(dataPribadiStore.email ? dataPribadiStore.email : '');
-    const [noNpwp,setNoNPWP]            = React.useState(dataPribadiStore.noNpwp ? dataPribadiStore.noNpwp : '');
+    const [nama,setNama]                = React.useState(dataPribadiStore.nama      ? dataPribadiStore.nama : '');
+    const [tmpLahir,setTmpLahir]        = React.useState(dataPribadiStore.tmpLahir  ? dataPribadiStore.tmpLahir : '');
+    const [tglLahir,setTglLahir]        = React.useState(dataPribadiStore.tglLahir  ? dataPribadiStore.tglLahir : '2021-01-01');
+    const [jenKel,setJenKel]            = React.useState(dataPribadiStore.jenKel    ? dataPribadiStore.jenKel : '');
+    const [noHp,setnoHp]                = React.useState(dataPribadiStore.noHp      ? dataPribadiStore.noHp : '');
+    const [email,setEmail]              = React.useState(dataPribadiStore.email     ? dataPribadiStore.email : '');
+    const [noNpwp,setNoNPWP]            = React.useState(dataPribadiStore.noNpwp    ? dataPribadiStore.noNpwp : '');
 
     // form data alamat domisili
-    const [alamatKtp, setAlamatDomisili]= React.useState('');
-    const [provKtp, setProvDomisili]    = React.useState('');
-    const [kabKtp, setKabDomisili]      = React.useState('');
-    const [posKtp, setPosDomisili]      = React.useState('');
+    const [alamatDom, setAlamatDomisili]= React.useState(dataAlamatStore.alamatDom              ? dataAlamatStore.alamatDom : '');
+    const [provDom, setProvDomisili]    = React.useState(dataAlamatStore.provDom.nama_provinsi  ? dataAlamatStore.provDom.nama_provinsi : '');
+    const [kabDom, setKabDomisili]      = React.useState(dataAlamatStore.kabDom.nama_kabupaten  ? dataAlamatStore.kabDom.nama_kabupaten : '');
+    const [posDom, setPosDomisili]      = React.useState(dataAlamatStore.posDom                 ? dataAlamatStore.posDom : '');
 
     // from data keluarga
-    const [ibuKandung,setIbuKandung]    = React.useState('');
-
+    
     // input
     const [instansi, setInstansi]       = React.useState('');
     const [peserta, setPeserta]         = React.useState('');
     const [noPeserta, setNoPeserta]     = React.useState('');
     const [statPegawai, setStatPegawai] = React.useState('');
     const [fasKes, setFaskes]           = React.useState('');
+    const [ibuKandung,setIbuKandung]    = React.useState('');
+    
+    //cari ibu kandung
+    const findIbuKandung = (data) => {
+        return data.filter((value) => {
+            if(value.hubKeluarga === 'ibu kandung') return value;
+        })
+    }
+    
+
+    React.useEffect(() => {
+        let ibu = findIbuKandung(dataKeluargaStore);
+        setIbuKandung(ibu[0].nama);
+        console.log(ibu);
+    },[])
 
     const handleInputChange = (event) => {
         switch(event.target.id){
@@ -156,55 +172,39 @@ const InputDataBpjs = () => {
                     </Grid>
                     <Grid item xs={12} lg={12}>
                         <TextField
-                        id="alamatKtp"
+                        id="alamatDom"
                         label="Alamat Lengkap Tenaga Kerja"
-                        value={alamatKtp}
+                        value={alamatDom}
                         // onChange={handleInputChange}
                         fullWidth
                         multiline
                         rowsMax={4}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <FormControl>
-                            <InputLabel id="provKtpLabel">Provinsi</InputLabel>
-                            <Select
-                                labelId="provKtpLabel"
-                                id="provKtp"
-                                value={provKtp}
-                                // onChange={handleInputChange}
-                                autoWidth
-                            >
-                                <MenuItem value="A">DI Yogyakarta</MenuItem>
-                                <MenuItem value="B">Jawa Tengah</MenuItem>
-                                <MenuItem value="O">Jawa Timur</MenuItem>
-                                <MenuItem value="AB">Jawa Barat</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl>
-                            <InputLabel id="kabKtpLabel">Kabupaten / Kota</InputLabel>
-                            <Select
-                                labelId="kabKtpLabel"
-                                id="kabKtp"
-                                value={kabKtp}
-                                // onChange={handleInputChange}
-                                autoWidth
-                            >
-                                <MenuItem value="A">Sleman</MenuItem>
-                                <MenuItem value="B">Semarang</MenuItem>
-                                <MenuItem value="O">Surabaya</MenuItem>
-                                <MenuItem value="AB">Bandung</MenuItem>
-                            </Select>
-                        </FormControl>
+                    <Grid item xs={12} lg={4}>
+                        <TextField
+                        id="posDom"
+                        label="Kode Pos"
+                        value={posDom}
+                        // onChange={handleInputChange}
+                        fullWidth
+                        />
                     </Grid>
                     <Grid item xs={12} lg={4}>
                         <TextField
-                        id="posKtp"
-                        label="Kode Pos"
-                        value={posKtp}
-                        onChange={handleInputChange}
+                        id="kabDom"
+                        label="Kabupaten / Kota"
+                        value={kabDom}
+                        // onChange={handleInputChange}
+                        fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={12} lg={4}>
+                        <TextField
+                        id="provDom"
+                        label="Provinsi"
+                        value={provDom}
+                        // onChange={handleInputChange}
                         fullWidth
                         />
                     </Grid>

@@ -138,22 +138,7 @@ const InputDataPribadi = () => {
     ]
     
     
-    useEffect(() => { saveState(); },[nik])
-    useEffect(() => { saveState(); },[noKk])
-    useEffect(() => { saveState(); },[noNpwp])
-    useEffect(() => { saveState(); },[nama])
-    useEffect(() => { saveState(); },[jenKel])
-    useEffect(() => { saveState(); },[agama])
-    useEffect(() => { saveState(); },[nationality])
-    useEffect(() => { saveState(); },[tmpLahir])
-    useEffect(() => { saveState(); },[tglLahir])
-    useEffect(() => { saveState(); },[golDarah])
-    useEffect(() => { saveState(); },[noHp])
-    useEffect(() => { saveState(); },[noTelepon])
-    useEffect(() => { saveState(); },[email])
-    useEffect(() => { saveState(); },[statNikah])
-    useEffect(() => { saveState(); },[tglNikah])
-    useEffect(() => { saveState(); },[jmlAnak])
+    useEffect(() => { saveState(); },[nik,noKk,noNpwp,nama,jenKel,agama,nationality,tmpLahir,tglLahir,golDarah,noHp,noTelepon,email,statNikah,tglNikah,jmlAnak])
     
     const dataAgama = masterAgamaStore || [];
     useEffect(() => { if (dataAgama.length === 0){ dispatch(getDataAgama()) } },[])
