@@ -11,6 +11,7 @@ const defaultState = {
 }
 
 const inputDataReducer = (state = defaultState, action) => {
+    let newArray = []
     switch(action.type){
         case 'SET_DATA_PRIBADI':
             state.dataPribadi = {
@@ -48,8 +49,37 @@ const inputDataReducer = (state = defaultState, action) => {
                 action.payload
             ]
             return state
+        case 'UPDATE_DATA_KELUARGA':
+            newArray = []
+            for(let i=0;i < state.dataKeluarga.length; i++){
+                if(state.dataKeluarga[i].openDialogTime === action.payload.openDialogTime){
+                    newArray.push(action.payload)
+                }else{
+                    newArray.push(state.dataKeluarga[i]);
+                }
+            }
+            state.dataKeluarga = [
+                ...newArray
+            ]
+            return state
+        case 'DELETE_DATA_KELUARGA':
+            newArray = []
+            for(let i=0;i < state.dataKeluarga.length; i++){
+                if(state.dataKeluarga[i].openDialogTime !== action.payload.openDialogTime){
+                    newArray.push(state.dataKeluarga[i])
+                }
+            }
+            state.dataKeluarga = [
+                ...newArray
+            ]
+            return state
         case 'SET_INPUT_KELUARGA_BARU':
             state.inputKeluargaBaru = {
+                ...action.payload
+            }
+            return state
+        case 'SET_DATA_BPJS': 
+            state.dataBpjs = {
                 ...action.payload
             }
             return state

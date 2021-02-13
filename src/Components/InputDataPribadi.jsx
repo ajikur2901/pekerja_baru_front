@@ -141,7 +141,7 @@ const InputDataPribadi = () => {
     useEffect(() => { saveState(); },[nik,noKk,noNpwp,nama,jenKel,agama,nationality,tmpLahir,tglLahir,golDarah,noHp,noTelepon,email,statNikah,tglNikah,jmlAnak])
     
     const dataAgama = masterAgamaStore || [];
-    useEffect(() => { if (dataAgama.length === 0){ dispatch(getDataAgama()) } },[])
+    useEffect(() => { if (dataAgama.length === 0) dispatch(getDataAgama()) },[])
 
     return(
         <div>
@@ -195,8 +195,8 @@ const InputDataPribadi = () => {
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Jenis Kelamin</FormLabel>
                             <RadioGroup aria-label="Jenis Kelamin" name="jenKel" value={jenKel} onChange={handleSelectionChange} row>
-                                <FormControlLabel value="Laki-Laki" control={<Radio/>} label="Laki-Laki" />
-                                <FormControlLabel value="Perempuan" control={<Radio/>} label="Perempuan" />
+                                <FormControlLabel value="L" control={<Radio/>} label="Laki-Laki" />
+                                <FormControlLabel value="P" control={<Radio/>} label="Perempuan" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
@@ -305,12 +305,12 @@ const InputDataPribadi = () => {
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Status Pernikahan</FormLabel>
                             <RadioGroup aria-label="Status Pernikahan" name="statNikah" value={statNikah} onChange={handleSelectionChange} row>
-                                <FormControlLabel value="Menikah" control={<Radio/>} label="Menikah" />
-                                <FormControlLabel value="Belum Menikah" control={<Radio/>} label="Belum Menikah" />
+                                <FormControlLabel value="1" control={<Radio/>} label="Menikah" />
+                                <FormControlLabel value="0" control={<Radio/>} label="Belum Menikah" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} lg={4}>
+                    <Grid item xs={12} lg={4} className={statNikah === "1" ? '' : 'hidden'}>
                         <TextField
                         id="tglNikah"
                         label="Tanggal Nikah"
@@ -320,7 +320,7 @@ const InputDataPribadi = () => {
                         type="date"
                         />
                     </Grid>
-                    <Grid item xs={12} lg={4}>
+                    <Grid item xs={12} lg={4} className={statNikah === "1" ? '' : 'hidden'}>
                         <TextField
                         id="jmlAnak"
                         label="Jumlah Anak"

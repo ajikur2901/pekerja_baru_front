@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Grid, TextField, FormControl, FormLabel, RadioGroup,
-    FormControlLabel, Radio, Select, InputLabel, MenuItem 
+    FormControlLabel, Radio, MenuItem 
 } from '@material-ui/core';
 import {
     useSelector, useDispatch
 } from 'react-redux';
+import {
+    saveDataBpjs, getDataHubunganKerja
+} from '../Actions/InputDataActions';
 
 
 const InputDataBpjs = () => {
     const dataPribadiStore  = useSelector(state => state.inputDataReducer.dataPribadi);
     const dataAlamatStore   = useSelector(state => state.inputDataReducer.dataAlamat);
     const dataKeluargaStore = useSelector(state => state.inputDataReducer.dataKeluarga);
+    const dataBpjsStore    = useSelector(state => state.inputDataReducer.dataBpjs);
+    const dataHubunganKerjaStore = useSelector(state => state.inputDataReducer.masterHubunganKerja);
 
+    const dispatch = useDispatch();
+    
     // from Data Pribadi
     const [nama,setNama]                = React.useState(dataPribadiStore.nama      ? dataPribadiStore.nama : '');
     const [tmpLahir,setTmpLahir]        = React.useState(dataPribadiStore.tmpLahir  ? dataPribadiStore.tmpLahir : '');
@@ -31,12 +38,12 @@ const InputDataBpjs = () => {
     // from data keluarga
     
     // input
-    const [instansi, setInstansi]       = React.useState('');
-    const [peserta, setPeserta]         = React.useState('');
-    const [noPeserta, setNoPeserta]     = React.useState('');
-    const [statPegawai, setStatPegawai] = React.useState('');
-    const [fasKes, setFaskes]           = React.useState('');
-    const [ibuKandung,setIbuKandung]    = React.useState('');
+    const [instansi, setInstansi]       = React.useState(dataBpjsStore.instansi     ? dataBpjsStore.instansi : 'CV. Karya Hidup Sentosa');
+    const [peserta, setPeserta]         = React.useState(dataBpjsStore.peserta      ? dataBpjsStore.peserta : '');
+    const [noPeserta, setNoPeserta]     = React.useState(dataBpjsStore.noPeserta    ? dataBpjsStore.noPeserta : '');
+    const [statPegawai, setStatPegawai] = React.useState(dataBpjsStore.statPegawai  ? dataBpjsStore.statPegawai : '');
+    const [fasKes, setFaskes]           = React.useState(dataBpjsStore.fasKes       ? dataBpjsStore.fasKes : '');
+    const [ibuKandung,setIbuKandung]    = React.useState(dataBpjsStore.ibuKandung   ? dataBpjsStore.ibuKandung : '');
     
     //cari ibu kandung
     const findIbuKandung = (data) => {
@@ -45,23 +52,26 @@ const InputDataBpjs = () => {
         })
     }
     
-
     React.useEffect(() => {
         let ibu = findIbuKandung(dataKeluargaStore);
-        setIbuKandung(ibu[0].nama);
-        console.log(ibu);
+        if(!isIbuKandungEmpty) setIbuKandung(ibu[0].nama);
     },[])
+
+    const isIbuKandungEmpty = () => {
+        let ibu = findIbuKandung(dataKeluargaStore);
+        return ibu.length > 0 ? false : true;
+    }
 
     const handleInputChange = (event) => {
         switch(event.target.id){
-            case 'instansi':
-                setInstansi(event.target.value);
-                break;
             case 'noPeserta':
                 setNoPeserta(event.target.value);
                 break;
             case 'fasKes':
                 setFaskes(event.target.value);
+                break;
+            case 'ibuKandung':
+                if(!isIbuKandungEmpty) setIbuKandung(event.target.value);
                 break;
             default:
                 return;
@@ -81,17 +91,25 @@ const InputDataBpjs = () => {
         }
     }
 
-    const dataStatusPegawai = [
-        {
-            status: 'Tetap',
-        },
-        {
-            status: 'Kontrak',
-        },
-        {
-            status: 'Paruh Waktu',
-        },
-    ]
+    const saveState = () => {
+        let dataBpjs = {
+            'instansi'      : instansi,
+            'peserta'       : peserta,
+            'noPeserta'     : noPeserta,
+            'statPegawai'   : statPegawai,
+            'fasKes'        : fasKes,
+            'ibuKandung'    : ibuKandung
+        }
+
+        dispatch(saveDataBpjs(dataBpjs));
+    }
+
+    useEffect(() => {
+        saveState();
+    },[instansi,peserta,noPeserta,statPegawai,fasKes,ibuKandung])
+
+    const dataHubunganKerja = dataHubunganKerjaStore || [];
+    useEffect(() => { if (dataHubunganKerja.length === 0){ dispatch(getDataHubunganKerja()) } },[])
 
     return(
         <div>
@@ -102,7 +120,7 @@ const InputDataBpjs = () => {
                           id="instansi"
                           label="Nama Badan Usaha/Instansi/Asosiasi"
                           value={instansi}
-                          onChange={handleInputChange}
+                        //   onChange={handleInputChange}
                           fullWidth
                         />
                     </Grid>
@@ -110,12 +128,12 @@ const InputDataBpjs = () => {
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Apakah sebelumnya sudah menjadi peserta ?</FormLabel>
                             <RadioGroup aria-label="peserta" name="peserta" value={peserta} onChange={handleSelectionChange} row>
-                                <FormControlLabel value="Belum" control={<Radio/>} label="Belum" />
-                                <FormControlLabel value="Sudah" control={<Radio/>} label="Sudah" />
+                                <FormControlLabel value="0" control={<Radio/>} label="Belum" />
+                                <FormControlLabel value="1" control={<Radio/>} label="Sudah" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className={peserta === "1" ? '' : 'hidden'}>
                         <TextField
                           id="noPeserta"
                           label="Bila sudah, mohon lengkapi nomor referensi (nomor peserta) BPJS ketenagakerjaan"
@@ -166,7 +184,7 @@ const InputDataBpjs = () => {
                         id="ibuKandung"
                         label="Nama Lengkap Ibu Kandung Tenaga Kerja"
                         value={ibuKandung}
-                        // onChange={handleInputChange}
+                        onChange={handleInputChange}
                         fullWidth
                         />
                     </Grid>
@@ -246,15 +264,15 @@ const InputDataBpjs = () => {
                         select
                         >
                             {
-                                dataStatusPegawai.map((option) => (
-                                    <MenuItem key={option.status} value={option.status}>
-                                        {option.status}
+                                dataHubunganKerja.map((option) => (
+                                    <MenuItem key={option.hubungan} value={option.hubungan}>
+                                        {option.hubungan}
                                     </MenuItem>
                                 ))
                             }
                         </TextField>
                     </Grid>
-                    <Grid item xs={12} lg={4}>
+                    <Grid item xs={12} lg={6}>
                         <TextField
                         id="fasKes"
                         label="Kelas Rawat dan Faskes (Tingkat 1)"

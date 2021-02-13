@@ -19,8 +19,8 @@ const InputDataKeluarga = () => {
 
     const [rows,setRows] = React.useState([]);
 
-    const createData = (nama,alamat,hubKel,tglLahir,ditanggung,statMenikah) => {
-        let row = {nama,alamat,hubKel,tglLahir,ditanggung,statMenikah}
+    const createData = (nama,alamat,hubKel,tglLahir,ditanggung,statMenikah,openDialogTime) => {
+        let row = {nama,alamat,hubKel,tglLahir,ditanggung,statMenikah,openDialogTime}
         setRows((oldArray) => [...oldArray,row])
     }
 
@@ -33,7 +33,8 @@ const InputDataKeluarga = () => {
                 anggota.hubKeluarga,
                 anggota.tglLahir,
                 anggota.statDitanggung,
-                anggota.statNikah
+                anggota.statNikah,
+                anggota.openDialogTime
             )
         })
     },[dataKeluargaStore])
@@ -45,13 +46,13 @@ const InputDataKeluarga = () => {
             hubKeluarga     : data.hubKel,
             tglLahir        : data.tglLahir,
             statDitanggung  : data.ditanggung,
-            statNikah       : data.statMenikah
+            statNikah       : data.statMenikah,
+            openDialogTime  : data.openDialogTime
         }
         dispatch(saveInputKeluargaBaru(anggotaKeluarga));
     }
 
     const handleEditData = (data) => {
-        console.log(data);
         saveState(data);
     }
 
@@ -86,8 +87,8 @@ const InputDataKeluarga = () => {
                                                 <TableCell>{row.alamat}</TableCell>
                                                 <TableCell>{row.hubKel}</TableCell>
                                                 <TableCell>{row.tglLahir}</TableCell>
-                                                <TableCell>{row.ditanggung}</TableCell>
-                                                <TableCell>{row.statMenikah}</TableCell>
+                                                <TableCell>{row.ditanggung === "1" ? 'Ya' : 'Tidak'}</TableCell>
+                                                <TableCell>{row.statMenikah === "1" ? 'Menikah' : 'Belum Menikah'}</TableCell>
                                                 <TableCell>
                                                     <Button variant="contained" color="primary" onClick={() => {handleEditData(row)} } ><EditSharp /></Button>
                                                 </TableCell>

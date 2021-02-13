@@ -28,6 +28,7 @@ const InputKeluargaBaru = () => {
     const [tglLahir, setTglLahir]       = React.useState('2000-01-01');
     const [statDitanggung, setStatDitanggung] = React.useState('');
     const [statNikah, setStatNikah]     = React.useState('');
+    const openDialogTime = addKeluarga ? Math.floor(Date.now() / 1000) : inputKeluargaBaruStore.openDialogTime
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -47,7 +48,7 @@ const InputKeluargaBaru = () => {
         setStatDitanggung('');
         setStatNikah('');
     }
-
+    
     const handleLoad = () => {
         setNama(inputKeluargaBaruStore.nama);
         setAlamat(inputKeluargaBaruStore.alamat);
@@ -90,25 +91,32 @@ const InputKeluargaBaru = () => {
     const dataHubunganKeluarga = masterHubunganKeluargaStore || [];
     useEffect(() => { if(dataHubunganKeluarga.length === 0){ dispatch(getDataHubunganKeluarga()) }},[]);
 
-    const saveState = () => {
+    const saveState = (action) => {
         let keluargaBaru = {
             nama: nama,
             alamat: alamat,
             hubKeluarga: hubKeluarga,
             tglLahir: tglLahir,
             statDitanggung: statDitanggung,
-            statNikah: statNikah
+            statNikah: statNikah,
+            openDialogTime: openDialogTime
         }
 
-        dispatch(saveDataKeluarga(keluargaBaru));
+        dispatch(saveDataKeluarga(keluargaBaru,action));
     }
 
     const handleSave = () => {
-        if(addKeluarga){
-            saveState();
-        }else{
-            console.log('fitur update belum dibuat');
-        }
+        saveState('save');
+        setOpen(false);
+    }
+
+    const handleDelete = () => {
+        saveState('delete');
+        setOpen(false);
+    }
+
+    const handleUpdate = () => {
+        saveState('update');
         setOpen(false);
     }
 
@@ -120,10 +128,6 @@ const InputKeluargaBaru = () => {
         }
         
     },[inputKeluargaBaruStore])
-    
-    const handleDelete = () => {
-        console.log('fitur delete belum di buat')
-    }
 
     return(
         <div>
@@ -135,7 +139,7 @@ const InputKeluargaBaru = () => {
                 <DialogTitle>Tambah Anggota Keluarga</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        ini form untuk menambahkan data keluarga
+                        form untuk menambahkan data keluarga
                     </DialogContentText>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
@@ -193,8 +197,8 @@ const InputKeluargaBaru = () => {
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Ditanggung</FormLabel>
                                 <RadioGroup aria-label="Ditanggung" name="statDitanggung" value={statDitanggung} onChange={handleSelectionChange} row>
-                                    <FormControlLabel value="Ya" control={<Radio/>} label="Ya" />
-                                    <FormControlLabel value="Tidak" control={<Radio/>} label="Tidak" />
+                                    <FormControlLabel value="1" control={<Radio/>} label="Ya" />
+                                    <FormControlLabel value="0" control={<Radio/>} label="Tidak" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
@@ -202,8 +206,8 @@ const InputKeluargaBaru = () => {
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Status Pernikahan</FormLabel>
                                 <RadioGroup aria-label="Status Pernikahan" name="statNikah" value={statNikah} onChange={handleSelectionChange} row>
-                                    <FormControlLabel value="Menikah" control={<Radio/>} label="Menikah" />
-                                    <FormControlLabel value="Belum Menikah" control={<Radio/>} label="Belum Menikah" />
+                                    <FormControlLabel value="1" control={<Radio/>} label="Menikah" />
+                                    <FormControlLabel value="0" control={<Radio/>} label="Belum Menikah" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
@@ -216,8 +220,8 @@ const InputKeluargaBaru = () => {
                     <Button onClick={addKeluarga ? handleReset : handleDelete} variant="contained" color="secondary">
                         {addKeluarga ? 'Reset' : 'Delete'}
                     </Button>
-                    <Button onClick={handleSave} variant="contained" color="primary">
-                        Simpan
+                    <Button onClick={addKeluarga ? handleSave : handleUpdate} variant="contained" color="primary">
+                        {addKeluarga ? 'Save' : 'Update'}
                     </Button>
                 </DialogActions>
             </Dialog>
