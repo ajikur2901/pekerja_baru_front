@@ -6,8 +6,9 @@ import {
     fetchUser
 } from '../Actions/UserActions';
 import Komputer from './img/komputer.png';
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
+import {
+    Grid, Button, TextField
+} from '@material-ui/core'
 
 
 class Login extends React.Component {
@@ -52,25 +53,33 @@ class Login extends React.Component {
                         ">
                         <div className="rounded-xl h-full w-full bg-white p-4 border-2 border-blue-400">
                             <form onSubmit={this.onSubmit} >
-                                <TextField
-                                    id="email"
-                                    label="email"
-                                    name="email"
-                                    value={this.state.email}
-                                    onChange={this.handleOnChange}
-                                    type="email"
-                                />
-                                <TextField
-                                    id="password"
-                                    label="password"
-                                    name="password"
-                                    value={this.state.password}
-                                    onChange={this.handleOnChange}
-                                    type="password"
-                                />
-                                <Button variant="contained" color="primary" type="submit">
-                                    Masuk
-                                </Button>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="email"
+                                            label="email"
+                                            name="email"
+                                            value={this.state.email}
+                                            onChange={this.handleOnChange}
+                                            type="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="password"
+                                            label="password"
+                                            name="password"
+                                            value={this.state.password}
+                                            onChange={this.handleOnChange}
+                                            type="password"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Button variant="contained" color="primary" type="submit">
+                                            Masuk
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </form>
                         </div>
                     </div>
