@@ -87,7 +87,7 @@ const InputDataAlamat = () => {
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
-                            "Authorization": `Bearer ${localStorage.getItem("token")}`
+                            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
                         }
                     });
                 const kodePos = await response.json();
@@ -107,7 +107,7 @@ const InputDataAlamat = () => {
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
-                            "Authorization": `Bearer ${localStorage.getItem("token")}`
+                            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
                         }
                     });
                 const kodePos = await response.json();

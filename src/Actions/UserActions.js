@@ -1,8 +1,8 @@
 // action creators
 
-const setUser = (payload) => ({type: "SET_USER", payload})
-
-export const logUserOut = () => ({type: "LOG_OUT"})
+const setUserIn     = (payload) => ({type: "SET_USER", payload})
+const setUserOut    = ()        => ({type: "LOG_OUT"})
+const setErrorLogin = (payload) => ({type: "SET_LOGIN_ERROR", payload})
 
 // methods
 
@@ -11,26 +11,29 @@ export const autoLogin = () => dispatch => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
     })
     .then(res => res.json())
     .then(
         (data) => {
             if(data.hasOwnProperty('user')){
-                dispatch(setUser(data.user))
+                dispatch(setUserIn(data.user))
+                dispatch(setErrorLogin(false));
             }else{
-                dispatch(logUserOut());
+                dispatch(setUserOut());
+                dispatch(setErrorLogin(data));
             }
         },
         (error) => {
-            dispatch(logUserOut());
+            dispatch(setUserOut());
+            dispatch(setErrorLogin(error));
         }
     )
 }
         
 export const fetchUser = (userInfo) => dispatch => {
-
+    
     var data = new FormData();
 
     for(var key in userInfo){
@@ -46,12 +49,26 @@ export const fetchUser = (userInfo) => dispatch => {
         body: data
     })
     .then(res => res.json())
-    .then(data => {
-        if(data.hasOwnProperty('token')){
-            localStorage.setItem("token", data.token)
-            dispatch(autoLogin());
-        }else{
-            dispatch(logUserOut());
+    .then(
+        (data) => {
+            if(data.hasOwnProperty('token')){
+                sessionStorage.setItem("token", data.token)
+                dispatch(autoLogin());
+                dispatch(setErrorLogin(false));
+            }else{
+                dispatch(setUserOut());
+                dispatch(setErrorLogin(data));
+            }
+        },
+        (error) => {
+            dispatch(setUserOut());
+            dispatch(setErrorLogin(error));
         }
-    })
+    )
+
+}
+
+export const logOut = () => dispatch => {
+    sessionStorage.removeItem("token");
+    dispatch(setUserOut())
 }

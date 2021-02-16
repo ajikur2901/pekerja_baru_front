@@ -9,11 +9,15 @@ import { connect } from 'react-redux';
 import {
   autoLogin
 } from './Actions/UserActions';
+import {
+  CircularProgress
+} from '@material-ui/core'
 
 class App extends React.Component {
   
   componentDidMount(){
     this.props.autoLogin()
+    console.log(this.props.userReducer)
   }
 
   render(){
@@ -21,19 +25,47 @@ class App extends React.Component {
       <Router>
         <div className="bg-gradient-to-b from-blue-300 to-blue-600 w-screen min-h-screen h-auto">
           <Switch>
-            <Route path="/Login">
+            <Route exact path="/Dashboard">
               {
-                this.props.userReducer.loggedIn === false ? <Login /> : <Redirect to="/" />
+                () => {
+                  if(this.props.userReducer.loggedIn === true){
+                    return <Dashboard />
+                  }else if(this.props.userReducer.loggedIn === false){
+                    return <Redirect to="/Login" />
+                  }else{
+                    return <CircularProgress />
+                  }
+                }
               }
             </Route>
-            <Route exact path="/">
+            <Route exact path="/InputData">
               {
-                this.props.userReducer.loggedIn === false ? <Redirect to="/Login" /> : <Dashboard />
+                () => {
+                  if(this.props.userReducer.loggedIn === true){
+                    return <InputData />
+                  }else if(this.props.userReducer.loggedIn === false){
+                    return <Redirect to="/Login" />
+                  }else{
+                    return <CircularProgress />
+                  }
+                }
               }
             </Route>
-            <Route path="/InputData">
+            <Route path={["/","/Login"]}>
               {
-                this.props.userReducer.loggedIn === false ? <Redirect to="/Login" /> : <InputData />
+                () => {
+                  if(this.props.userReducer.loggedIn === true){
+                    return <Redirect to="/Dashboard" />
+                  }else if(this.props.userReducer.loggedIn === false){
+                    return <Login />
+                  }else{
+                    return (
+                      <div className="flex justify-center items-center">
+                        <CircularProgress />
+                      </div>
+                    )
+                  }
+                }
               }
             </Route>
           </Switch>

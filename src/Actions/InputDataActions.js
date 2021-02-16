@@ -50,7 +50,7 @@ export const getDataAgama = () => dispatch => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
     })
     .then(res => res.json())
@@ -72,7 +72,7 @@ export const getDataHubunganKeluarga = () => dispatch => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
     })
     .then(res => res.json())
@@ -94,7 +94,7 @@ export const getDataHubunganKerja = () => dispatch => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
     })
     .then(res => res.json())
@@ -116,7 +116,7 @@ export const getDataStatusRumah = () => dispatch => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
     })
     .then(res => res.json())
@@ -146,7 +146,7 @@ const sendDataAlamat = (data,id) => {
         method: 'POST',
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: dataFormKtp
     })
@@ -173,7 +173,7 @@ const sendDataAlamat = (data,id) => {
         method: 'POST',
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: dataFormDom
     })
@@ -202,7 +202,7 @@ const sendDataKeluarga = (data,id) => {
             method: 'POST',
             headers: {
                 "Accept": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
             },
             body: dataForm
         })
@@ -230,7 +230,7 @@ const sendDataBpjs = (data,id) => {
         method: 'POST',
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: dataForm
     })
@@ -269,7 +269,7 @@ export const  saveInputData = (data) => dispatch => {
         method: 'POST',
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: dataForm
     })
@@ -277,10 +277,12 @@ export const  saveInputData = (data) => dispatch => {
     .then(
         (result) => {
             console.log(result);
-            idPribadi = result.id;
-            sendDataAlamat(data.dataAlamat, idPribadi);
-            sendDataKeluarga(data.dataKeluarga, idPribadi);
-            sendDataBpjs(data.dataBpjs, idPribadi);
+            if(result.hasOwnProperty('id')){
+                idPribadi = result.id;
+                sendDataAlamat(data.dataAlamat, idPribadi);
+                sendDataKeluarga(data.dataKeluarga, idPribadi);
+                sendDataBpjs(data.dataBpjs, idPribadi);
+            }
         },
         (error) => {
             console.log(error)
