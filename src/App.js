@@ -1,7 +1,4 @@
 import React from 'react';
-import Login from './Components/Login';
-import Dashboard from './Components/Dashboard';
-import InputData from './Components/InputData';
 import {
   Switch, Route, BrowserRouter as Router, Redirect
 } from 'react-router-dom';
@@ -12,6 +9,12 @@ import {
 import {
   CircularProgress
 } from '@material-ui/core'
+
+import Login from './Components/Login';
+import Dashboard from './Components/Dashboard';
+import InputData from './Components/InputData';
+import SettingPage from './Components/Setting';
+import ListData from './Components/ListData';
 
 class App extends React.Component {
   
@@ -28,43 +31,49 @@ class App extends React.Component {
             <Route exact path="/Dashboard">
               {
                 () => {
-                  if(this.props.userReducer.loggedIn === true){
-                    return <Dashboard />
-                  }else if(this.props.userReducer.loggedIn === false){
-                    return <Redirect to="/Login" />
-                  }else{
-                    return <CircularProgress />
-                  }
+                  if(this.props.userReducer.loggedIn === true) return <Dashboard />
+                  if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
+                  return <CircularProgress />
                 }
               }
             </Route>
             <Route exact path="/InputData">
               {
                 () => {
-                  if(this.props.userReducer.loggedIn === true){
-                    return <InputData />
-                  }else if(this.props.userReducer.loggedIn === false){
-                    return <Redirect to="/Login" />
-                  }else{
-                    return <CircularProgress />
-                  }
+                  if(this.props.userReducer.loggedIn === true) return <InputData />
+                  if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
+                  return <CircularProgress />
+                }
+              }
+            </Route>
+            <Route exact path="/ListData">
+              {
+                () => {
+                  if(this.props.userReducer.loggedIn === true) return <ListData />
+                  if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
+                  return <CircularProgress />
+                }
+              }
+            </Route>
+            <Route exact path="/Setting">
+              {
+                () => {
+                  if(this.props.userReducer.loggedIn === true) return <SettingPage />
+                  if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
+                  return <CircularProgress />
                 }
               }
             </Route>
             <Route path={["/","/Login"]}>
               {
                 () => {
-                  if(this.props.userReducer.loggedIn === true){
-                    return <Redirect to="/Dashboard" />
-                  }else if(this.props.userReducer.loggedIn === false){
-                    return <Login />
-                  }else{
-                    return (
-                      <div className="flex justify-center items-center">
-                        <CircularProgress />
-                      </div>
-                    )
-                  }
+                  if(this.props.userReducer.loggedIn === true) return <Redirect to="/Dashboard" />
+                  if(this.props.userReducer.loggedIn === false) return <Login />
+                  return (
+                    <div className="flex justify-center items-center">
+                      <CircularProgress />
+                    </div>
+                  )
                 }
               }
             </Route>
