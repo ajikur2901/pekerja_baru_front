@@ -18,7 +18,8 @@ import {
     List as ListIcon,
     Settings as SettingIcon,
     ExitToApp,
-    Menu as MenuIcon
+    Menu as MenuIcon,
+    People as PeopleIcon
 } from '@material-ui/icons';
 import {
     logOut
@@ -72,6 +73,11 @@ const Navigation = () => {
             icon: <SettingIcon />,
             link: 'Setting'
         },
+        {
+            name: 'user',
+            icon: <PeopleIcon />,
+            link: 'User'
+        }
     ];
 
     const handleLogOut = () => {

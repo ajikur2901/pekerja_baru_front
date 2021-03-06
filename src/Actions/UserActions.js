@@ -7,7 +7,7 @@ const setErrorLogin = (payload) => ({type: "SET_LOGIN_ERROR", payload})
 // methods
 
 export const autoLogin = () => dispatch => {
-    fetch('https://api-pb.tuturcinatur.xyz/api/user', {
+    fetch(process.env.REACT_APP_API_USER, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -40,7 +40,7 @@ export const fetchUser = (userInfo) => dispatch => {
         data.append(key, userInfo[key]);
     }
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/login', {
+    fetch(process.env.REACT_APP_API_LOGIN, {
         method: "POST",
         header: {
             "Content-Type": "multipart/form-data",

@@ -29,6 +29,7 @@ const InputKeluargaBaru = () => {
     const [statDitanggung, setStatDitanggung] = React.useState('');
     const [statNikah, setStatNikah]     = React.useState('');
     const openDialogTime = addKeluarga ? Math.floor(Date.now() / 1000) : inputKeluargaBaruStore.openDialogTime
+    const [requiredData, setRequiredData] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -92,32 +93,80 @@ const InputKeluargaBaru = () => {
     useEffect(() => { if(dataHubunganKeluarga.length === 0){ dispatch(getDataHubunganKeluarga()) }},[]);
 
     const saveState = (action) => {
-        let keluargaBaru = {
-            nama: nama,
-            alamat: alamat,
-            hubKeluarga: hubKeluarga,
-            tglLahir: tglLahir,
-            statDitanggung: statDitanggung,
-            statNikah: statNikah,
-            openDialogTime: openDialogTime
+        let completed = false;
+        let unCompleted = "";
+
+        if(nama.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Nama, "
         }
 
-        dispatch(saveDataKeluarga(keluargaBaru,action));
+        if(alamat.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Alamat, "
+        }
+
+        if(hubKeluarga.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Hubungan Keluarga, "
+        }
+
+        if(tglLahir.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Tanggal Lahir, "
+        }
+
+        if(statDitanggung.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Status Ditanggung, "
+        }
+
+        if(statNikah.length > 0){
+            completed = true
+        }else{
+            completed = false
+            unCompleted += "Status Nikah, "
+        }
+
+        if(completed === true){
+            let keluargaBaru = {
+                nama: nama,
+                alamat: alamat,
+                hubKeluarga: hubKeluarga,
+                tglLahir: tglLahir,
+                statDitanggung: statDitanggung,
+                statNikah: statNikah,
+                openDialogTime: openDialogTime
+            }
+            
+            dispatch(saveDataKeluarga(keluargaBaru,action));
+            setRequiredData('');
+            setOpen(false);
+        }else{
+            setRequiredData(unCompleted);
+        }
     }
 
     const handleSave = () => {
         saveState('save');
-        setOpen(false);
     }
 
     const handleDelete = () => {
         saveState('delete');
-        setOpen(false);
     }
 
     const handleUpdate = () => {
         saveState('update');
-        setOpen(false);
     }
 
     useEffect(() => {
@@ -211,6 +260,11 @@ const InputKeluargaBaru = () => {
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
+                        <div className={requiredData.length > 0 ? 'text-left text-red-500' : 'hidden'}>
+                            <Grid item xs={12}>
+                                Mohon lengkapi data-data berikut ini sebelum melanjutkan ke isian berikutnya : {requiredData}
+                            </Grid>
+                        </div>
                     </Grid>
                 </DialogContent>
                 <DialogActions>

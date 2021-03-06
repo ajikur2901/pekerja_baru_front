@@ -54,7 +54,10 @@ const InputDataBpjs = () => {
     
     React.useEffect(() => {
         let ibu = findIbuKandung(dataKeluargaStore);
-        if(!isIbuKandungEmpty()) setIbuKandung(ibu[0].nama);
+        console.log(ibu);
+        if(ibu.length > 0){
+            setIbuKandung(ibu[0].nama);
+        }
     },[])
 
     const isIbuKandungEmpty = () => {
@@ -71,7 +74,7 @@ const InputDataBpjs = () => {
                 setFaskes(event.target.value);
                 break;
             case 'ibuKandung':
-                if(!isIbuKandungEmpty()) setIbuKandung(event.target.value);
+                if(isIbuKandungEmpty()) setIbuKandung(event.target.value);
                 break;
             default:
                 return;

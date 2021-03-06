@@ -46,7 +46,7 @@ export const saveDataBpjs = (data) => dispatch => {
 
 export const getDataAgama = () => dispatch => {
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/agama', {
+    fetch(process.env.REACT_APP_API_AGAMA, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -68,7 +68,7 @@ export const getDataAgama = () => dispatch => {
 
 export const getDataHubunganKeluarga = () => dispatch => {
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/hubungan_keluarga', {
+    fetch(process.env.REACT_APP_API_HUBUNGAN_KELUARGA, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -90,7 +90,7 @@ export const getDataHubunganKeluarga = () => dispatch => {
 
 export const getDataHubunganKerja = () => dispatch => {
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/hubungan_kerja', {
+    fetch(process.env.REACT_APP_API_HUBUNGAN_KERJA, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -112,7 +112,7 @@ export const getDataHubunganKerja = () => dispatch => {
 
 export const getDataStatusRumah = () => dispatch => {
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/status_rumah', {
+    fetch(process.env.REACT_APP_API_STATUS_RUMAH, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -142,7 +142,7 @@ const sendDataAlamat = (data,id) => {
     dataFormKtp.append('desa', data.kelKtp.nama_kelurahan)
     dataFormKtp.append('kode_pos', data.posKtp)
     dataFormKtp.append('status_rumah', data.statRumahKtp)
-    fetch('https://api-pb.tuturcinatur.xyz/api/dataAlamatRumah/simpan', {
+    fetch(process.env.REACT_APP_API_DATA_ALAMAT_RUMAH, {
         method: 'POST',
         headers: {
             "Accept": "application/json",
@@ -169,7 +169,7 @@ const sendDataAlamat = (data,id) => {
     dataFormDom.append('desa', data.kelDom.nama_kelurahan)
     dataFormDom.append('kode_pos', data.posDom)
     dataFormDom.append('status_rumah', data.statRumahDom)
-    fetch('https://api-pb.tuturcinatur.xyz/api/dataAlamatDomisili/simpan', {
+    fetch(process.env.REACT_APP_API_DATA_ALAMAT_DOMISILI, {
         method: 'POST',
         headers: {
             "Accept": "application/json",
@@ -198,7 +198,7 @@ const sendDataKeluarga = (data,id) => {
         dataForm.append('ditanggung', value.statDitanggung )
         dataForm.append('status_nikah', value.statNikah )
         dataForm.append('alamat', value.alamat )
-        fetch('https://api-pb.tuturcinatur.xyz/api/dataKeluarga/simpan', {
+        fetch(process.env.REACT_APP_API_DATA_KELUARGA, {
             method: 'POST',
             headers: {
                 "Accept": "application/json",
@@ -226,7 +226,7 @@ const sendDataBpjs = (data,id) => {
     dataForm.append('no_peserta', data.noPeserta)
     dataForm.append('hubungan_kerja', data.statPegawai)
     dataForm.append('fasilitas_kesehatan_1', data.faskes)
-    fetch('https://api-pb.tuturcinatur.xyz/api/dataBpjs/simpan', {
+    fetch(process.env.REACT_APP_API_DATA_BPJS, {
         method: 'POST',
         headers: {
             "Accept": "application/json",
@@ -265,7 +265,7 @@ export const  saveInputData = (data) => dispatch => {
     dataForm.append('status_nikah',data.dataPribadi.statNikah);
     dataForm.append('created_by',data.dataPribadi.jmlAnak);
 
-    fetch('https://api-pb.tuturcinatur.xyz/api/dataPribadi/simpan', {
+    fetch(process.env.REACT_APP_API_DATA_PRIBADI, {
         method: 'POST',
         headers: {
             "Accept": "application/json",

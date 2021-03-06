@@ -15,6 +15,7 @@ import Dashboard from './Components/Dashboard';
 import InputData from './Components/InputData';
 import SettingPage from './Components/Setting';
 import ListData from './Components/ListData';
+import UserPage from './Components/User';
 
 class App extends React.Component {
   
@@ -59,6 +60,15 @@ class App extends React.Component {
               {
                 () => {
                   if(this.props.userReducer.loggedIn === true) return <SettingPage />
+                  if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
+                  return <CircularProgress />
+                }
+              }
+            </Route>
+            <Route exact path="/User">
+              {
+                () => {
+                  if(this.props.userReducer.loggedIn === true) return <UserPage />
                   if(this.props.userReducer.loggedIn === false) return <Redirect to="/Login" />
                   return <CircularProgress />
                 }
